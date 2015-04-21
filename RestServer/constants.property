@@ -1,0 +1,8 @@
+# Database:
+connection_string:      jdbc:mysql://localhost:3306/mobiele
+db_username:            root
+db_password:            root
+
+# Queries:
+getUserByUsername:      SELECT * FROM users WHERE username = ?
+addUser:                INSERT INTO users (username, password) VALUES (?, ?)
