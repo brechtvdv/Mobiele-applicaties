@@ -3,8 +3,10 @@ package be.ugent.groep3.bikebuddy.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +14,13 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.melnykov.fab.FloatingActionButton;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.activities.SearchActivity;
 import be.ugent.groep3.bikebuddy.beans.Bikelocation;
 
 
@@ -40,6 +45,13 @@ public class LocationListFragment extends Fragment {
         bikelocations.add(new Bikelocation("WOESTE", "PLACE AGORA",0,110));
         bikelocations.add(new Bikelocation("NOORDSTATION", "NOORDSTATIONSTRAAT 1",0,380));
         ListView listView = (ListView) view.findViewById(R.id.list);
+        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doSearch(v);
+            }
+        });
         listView.setAdapter(new CustomListAdapter(getActivity(),bikelocations));
 
         return view;
@@ -90,5 +102,10 @@ public class LocationListFragment extends Fragment {
 
             return convertView;
         }
+    }
+
+    public void doSearch(View view){
+        Intent intent = new Intent(getActivity(),SearchActivity.class);
+        startActivity(intent);
     }
 }
