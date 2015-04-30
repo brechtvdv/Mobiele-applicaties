@@ -6,21 +6,30 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
 
 
 public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
 
+    private List<LatLng> positions;
+    private final double EDGE = 0.05;
 
     public LocationMapFragment() {
         // Required empty public constructor
+        positions = new ArrayList<>();
+        positions.add(new LatLng(51.031531, 3.702725));
     }
 
     @Override
@@ -41,9 +50,33 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
-        googleMap.addMarker(new MarkerOptions()
-            .position(new LatLng(51.031531, 3.702725))
-            .title("Marker"));
+    public void onMapReady(final GoogleMap googleMap) {
+        for( LatLng pos : positions ) {
+            googleMap.addMarker(new MarkerOptions()
+                    .position(pos)
+                    .title("Marker"));
+        }
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(calculateBoundingBox(), 0));
+            }
+        });
+    }
+
+    private LatLngBounds calculateBoundingBox(){
+        double maxLong = Double.MIN_VALUE;
+        double maxLat = Double.MIN_VALUE;
+        double minLong = Double.MAX_VALUE;
+        double minLat = Double.MAX_VALUE;
+        for ( LatLng pos : positions ){
+            if ( maxLong < pos.longitude ) maxLong = pos.longitude;
+            if ( minLong > pos.longitude ) minLong = pos.longitude;
+            if ( maxLat < pos.longitude ) maxLat = pos.latitude;
+            if ( minLat > pos.longitude ) minLat = pos.latitude;
+        }
+        return new LatLngBounds(
+                new LatLng(minLat - EDGE, minLong - EDGE),
+                new LatLng(maxLat + EDGE, maxLong + EDGE));
     }
 }

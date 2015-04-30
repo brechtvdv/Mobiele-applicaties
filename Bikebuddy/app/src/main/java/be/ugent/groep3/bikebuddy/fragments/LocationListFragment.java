@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.activities.DetailActivity;
 import be.ugent.groep3.bikebuddy.activities.SearchActivity;
 import be.ugent.groep3.bikebuddy.beans.Bikelocation;
 
@@ -27,7 +28,7 @@ import be.ugent.groep3.bikebuddy.beans.Bikelocation;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LocationListFragment extends Fragment {
+public class LocationListFragment extends Fragment implements View.OnClickListener {
 
     public LocationListFragment() {
     }
@@ -52,20 +53,29 @@ public class LocationListFragment extends Fragment {
                 doSearch(v);
             }
         });
-        listView.setAdapter(new CustomListAdapter(getActivity(),bikelocations));
+        listView.setAdapter(new CustomListAdapter(getActivity(),bikelocations,this));
 
         return view;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Intent intent = new Intent(getActivity(),DetailActivity.class);
+        startActivity(intent);
     }
 
     private class CustomListAdapter extends BaseAdapter{
 
         private Activity activity;
+        private LocationListFragment fragment;
         private LayoutInflater inflater;
         private List<Bikelocation> bikeLocations;
 
-        public CustomListAdapter(Activity activity, List<Bikelocation> bikeLocations){
+        public CustomListAdapter(Activity activity, List<Bikelocation> bikeLocations, LocationListFragment fragment){
             this.activity = activity;
-            this.bikeLocations = bikeLocations;}
+            this.bikeLocations = bikeLocations;
+            this.fragment = fragment;
+        }
 
         @Override
         public int getCount() {
@@ -90,6 +100,7 @@ public class LocationListFragment extends Fragment {
             if (convertView == null)
                 convertView = inflater.inflate(R.layout.location_list_row, null);
 
+            // Bikelocations in component steken:
             Bikelocation bikelocation = bikeLocations.get(position);
             TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(bikelocation.getLocationName());
@@ -99,6 +110,7 @@ public class LocationListFragment extends Fragment {
             points.setText(Integer.toString(bikelocation.getNumberOfPoints()));
             TextView distance = (TextView) convertView.findViewById(R.id.distance);
             distance.setText(Integer.toString(bikelocation.getDistance()) + "m");
+            convertView.setOnClickListener(fragment);
 
             return convertView;
         }

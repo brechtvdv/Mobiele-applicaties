@@ -15,4 +15,8 @@
     <string name="order_criteria">Order criteria</string>
     <string name="radio_points">Bonuspoints</string>
     <string name="radio_distance">Distance</string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+    <!-- Detail activity -->
+    <string name="qr_text">When you return your bike, scan the QR code on the display to receive bonus points</string>
 </resources>
