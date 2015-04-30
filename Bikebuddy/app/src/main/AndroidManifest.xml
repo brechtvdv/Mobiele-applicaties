@@ -54,11 +54,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".RegisterActivity"
+            android:label="@string/title_activity_register"
+            android:windowSoftInputMode="adjustResize|stateVisible" >
+	</activity>
+	<activity
             android:name=".activities.SearchActivity"
             android:label="@string/title_activity_search" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.TabsActivity" />
+
         </activity>
         <activity
             android:name=".activities.DetailActivity"
