@@ -15,6 +15,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +46,6 @@ public class TabsActivity extends FragmentActivity {
 
         // Actionbar registreren:
         actionBar = getActionBar();
-        actionBar.setBackgroundDrawable(new ColorDrawable(Color.YELLOW));
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayShowHomeEnabled(false);
