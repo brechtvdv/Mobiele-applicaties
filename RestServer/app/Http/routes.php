@@ -19,3 +19,15 @@ Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+Route::get('stations', 'StationController@getStations');
+
+Route::get('profile', [
+    'middleware' => 'auth',
+    'uses' => 'UserController@showProfile'
+]);
+
+Route::get('scoreboard', [
+    'middleware' => 'auth',
+    'uses' => 'UserController@showScoreboard'
+]);
