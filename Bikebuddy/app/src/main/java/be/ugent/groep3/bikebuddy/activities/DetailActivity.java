@@ -29,6 +29,7 @@ import java.util.List;
 
 import be.ugent.groep3.bikebuddy.CustomViews.ClearableAutoCompleteTextView;
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.beans.BikeStation;
 
 public class DetailActivity extends Activity implements View.OnClickListener, OnMapReadyCallback{
 
@@ -48,6 +49,10 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        // STATION OPHALEN:
+        Intent intent = getIntent();
+        BikeStation bikeStation = (BikeStation) intent.getSerializableExtra("STATION");
+
         // ACTIONBAR:
         ActionBar actionBar = getActionBar();
         actionBar.setCustomView(R.layout.actionbar_standard);
@@ -66,9 +71,9 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
 
         // DUMMY DATA:
 
-        tvName.setText("PANNENHUIS");
-        tvAddress.setText("Rue Charles de Gaulle");
-        tvBonus.setText("1 bonus point");
+        tvName.setText(bikeStation.getName());
+        tvAddress.setText(bikeStation.getAddress());
+        tvBonus.setText(Integer.toString(bikeStation.getBonuspoints()));
         btnScan.setOnClickListener(this);
 
         // KAART INLADEN:

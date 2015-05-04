@@ -32,6 +32,7 @@ import android.widget.Toast;
 import be.ugent.groep3.bikebuddy.CustomViews.ClearableAutoCompleteTextView;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.logica.PlaceAutocompleteAdapter;
+import be.ugent.groep3.bikebuddy.logica.RestClient;
 
 public class SearchActivity extends FragmentActivity
         implements SeekBar.OnSeekBarChangeListener,View.OnClickListener,
@@ -45,6 +46,7 @@ public class SearchActivity extends FragmentActivity
      * to the user's sign in state as well as the Google's APIs.
      */
     protected GoogleApiClient mGoogleApiClient;
+    private SeekBar sbDistance;
 
     private TextView tv_radius;
     private PlaceAutocompleteAdapter mAdapter;
@@ -80,9 +82,9 @@ public class SearchActivity extends FragmentActivity
 
         // Seekbar radius instellen:
         tv_radius = (TextView) findViewById(R.id.radius_result);
-        SeekBar seekBar = (SeekBar) findViewById(R.id.seekbar_radius);
-        seekBar.setOnSeekBarChangeListener(this);
-        onProgressChanged(seekBar,seekBar.getProgress(),true);
+        sbDistance = (SeekBar) findViewById(R.id.seekbar_radius);
+        sbDistance.setOnSeekBarChangeListener(this);
+        onProgressChanged(sbDistance,sbDistance.getProgress(),true);
     }
 
     /**
@@ -226,5 +228,29 @@ public class SearchActivity extends FragmentActivity
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
+    }
+
+    public void SearchSubmit(View view) {
+        new Thread(new Runnable() {
+            public void run() {
+                double distance = ((double) (sbDistance.getProgress() * MAX_DISTANCE)) / (double) sbDistance.getMax();
+                int responsecode = 0;
+
+                RestClient restClient = new RestClient(getResources().getString(R.string.rest_stations));
+
+                try {
+                    restClient.Execute(RestClient.RequestMethod.GET);
+                    responsecode = 1;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                String response = restClient.getResponse();
+                Intent intent = new Intent();
+                intent.putExtra("STATIONS", response);
+                setResult(responsecode, intent);
+                finish();
+            }
+        }).start();
     }
 }

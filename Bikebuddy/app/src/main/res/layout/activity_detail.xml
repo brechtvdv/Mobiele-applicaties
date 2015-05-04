@@ -8,13 +8,13 @@
         android:id="@+id/detail_map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
+        android:layout_weight="1.4"
         android:name="com.google.android.gms.maps.MapFragment"/>
 
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_weight="1.4">
+        android:layout_weight="1">
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
@@ -31,6 +31,7 @@
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:scaleType="fitXY"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/location_icon"/>
                 <LinearLayout
                     android:layout_width="0dp"
@@ -69,6 +70,7 @@
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp"
                     android:scaleType="fitXY"
+                    android:layout_gravity="center_vertical"
                     android:src="@drawable/star_icon"/>
 
                 <!-- Name -->

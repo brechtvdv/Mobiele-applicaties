@@ -20,5 +20,6 @@
 
     <!-- Search activity -->
     <color name="search_text_a">#888888</color>
+    <color name="btn_search_text">#ffffff</color>
 
 </resources>
