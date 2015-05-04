@@ -18,8 +18,8 @@ class CreateStationsTable extends Migration {
 			$table->integer('number')->unique;
 			$table->string('name');
 			$table->string('address');
-			$table->float('long');
-			$table->float('lat');
+			$table->float('longitude');
+			$table->float('latitude');
 			$table->boolean('banking');
 			$table->boolean('bonus');
 			$table->string('status');
