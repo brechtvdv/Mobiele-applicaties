@@ -10,11 +10,12 @@
         android:paddingLeft="2dp"
         android:background="@android:color/transparent"
         android:src="@drawable/back_icon"/>
-    <be.ugent.groep3.bikebuddy.CustomViews.ClearableAutoCompleteTextView
-        android:layout_width="match_parent"
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="autocomplete_hint"
-        android:id="@+id/ab_location_search"
-        android:textColor="@android:color/primary_text_light"
-        android:layout_gravity="center_horizontal"/>
+        android:id="@+id/ab_title"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:layout_gravity="center_vertical"/>
 </LinearLayout>

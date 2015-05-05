@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -56,6 +57,9 @@ public class TabsActivity extends FragmentActivity {
                     .setTabListener(tabListener));
         }
         viewPager.setOnPageChangeListener(new SimpleOnPageChangeListener(actionBar));
+
+        // Laat het toetsenbord niet zien:
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
     }
 
