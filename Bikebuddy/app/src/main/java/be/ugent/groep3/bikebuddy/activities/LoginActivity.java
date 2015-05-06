@@ -89,18 +89,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
         });
 
-        Button mSignInOfflineButton = (Button) findViewById(R.id.sign_in_offline_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLoginOffline();
-            }
-        });
-
         Button mRegisterButton = (Button) findViewById(R.id.register_button);
         mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i("test","go to attemptRegister");
                 attemptRegister();
             }
         });
@@ -115,7 +108,8 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     }
 
     private void attemptRegister() {
-        Intent intent = new Intent(this, TabsActivity.class);
+        Log.i("test","attempt intent open");
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 

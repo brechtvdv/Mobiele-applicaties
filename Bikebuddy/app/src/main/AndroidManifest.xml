@@ -35,6 +35,12 @@
         <activity
             android:name=".activities.LoginActivity"
             android:label="@string/title_activity_tabs" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data
@@ -48,16 +54,15 @@
             android:name=".activities.TabsActivity"
             android:label="@string/title_activity_login"
             android:windowSoftInputMode="adjustResize|stateVisible" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activities.RegisterActivity"
             android:label="@string/title_activity_register"
             android:windowSoftInputMode="adjustResize|stateVisible" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.LoginActivity" />
 	</activity>
 	<activity
             android:name=".activities.SearchActivity"
