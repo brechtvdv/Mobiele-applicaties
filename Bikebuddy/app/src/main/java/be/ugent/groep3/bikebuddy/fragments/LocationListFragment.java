@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.melnykov.fab.FloatingActionButton;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +38,8 @@ import be.ugent.groep3.bikebuddy.activities.DetailActivity;
 import be.ugent.groep3.bikebuddy.activities.SearchActivity;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.beans.Bikelocation;
+import be.ugent.groep3.bikebuddy.logica.RestClient;
+import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 
 /**
@@ -37,6 +50,7 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     private final int RESULT_OK = 1;
     private List<BikeStation> bikestations;
     private ListView listView;
+    private ProgressBar spinner;
 
     public LocationListFragment() {}
 
@@ -53,7 +67,71 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             }
         });
 
+        // SQLite data inladen
+        // bikestations inladen
+        MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
+
+        // aantal stations opvragen in geheugen
+        // indien 0, opvragen van RESTserver
+        int aantal = sqlite.getAllBikeStations().size();
+
+        if(aantal==0) {
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
+                    InputStream source = retrieveStream(getResources().getString(R.string.rest_stations));
+                    Gson gson = new Gson();
+                    Reader reader = new InputStreamReader(source);
+                    List<BikeStation> stations;
+                    bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
+                    //Log.d("s",bikestations.toString());
+
+                    for (BikeStation station : bikestations) sqlite.addBikeStation(station);
+                }
+            });
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            bikestations = sqlite.getAllBikeStations();
+        }
+
+        updateGUIList();
+
         return view;
+    }
+
+    private InputStream retrieveStream(String url) {
+
+        DefaultHttpClient client = new DefaultHttpClient();
+
+        HttpGet getRequest = new HttpGet(url);
+
+        try {
+
+            HttpResponse getResponse = client.execute(getRequest);
+            final int statusCode = getResponse.getStatusLine().getStatusCode();
+
+            if (statusCode != HttpStatus.SC_OK) {
+                Log.w(getClass().getSimpleName(),
+                        "Error " + statusCode + " for URL " + url);
+                return null;
+            }
+
+            HttpEntity getResponseEntity = getResponse.getEntity();
+            return getResponseEntity.getContent();
+
+        }
+        catch (IOException e) {
+            getRequest.abort();
+            Log.w(getClass().getSimpleName(), "Error for URL " + url, e);
+        }
+
+        return null;
+
     }
 
     @Override

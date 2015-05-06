@@ -10,7 +10,7 @@ import android.util.Log;
 import java.util.LinkedList;
 import java.util.List;
 
-import be.ugent.groep3.bikebuddy.beans.Station;
+import be.ugent.groep3.bikebuddy.beans.BikeStation;
 
 /**
  * Created by brechtvdv on 04/05/15.
@@ -81,7 +81,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     private static final String[] COLUMNS = {KEY_ID,KEY_NUMBER,KEY_NAME,KEY_ADDRESS,KEY_LONGITUDE,KEY_LATITUDE,KEY_STATUS,KEY_BIKE_STANDS,KEY_AVAILABLE_BIKE_STANDS,KEY_AVAILABLE_BIKES,KEY_BONUSPOINTS};
 
-    public void addStation(Station station){
+    public void addBikeStation(BikeStation station){
         //for logging
         Log.d("addStation", station.toString());
 
@@ -110,7 +110,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Station getStation(int id){
+    public void addBikeStations(List<BikeStation> bikestations){
+        for(BikeStation station : bikestations) addBikeStation(station);
+    }
+
+    public BikeStation getBikeStation(int id){
 
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
@@ -131,7 +135,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
 
         // 4. build station object
-        Station station = new Station();
+        BikeStation station = new BikeStation();
         station.setId(Integer.parseInt(cursor.getString(0)));
         station.setNumber(cursor.getInt(1));
         station.setName(cursor.getString(2));
@@ -152,8 +156,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return station;
     }
 
-    public List<Station> getAllStations() {
-        List<Station> stations = new LinkedList<Station>();
+    public List<BikeStation> getAllBikeStations() {
+        List<BikeStation> stations = new LinkedList<BikeStation>();
 
         // 1. build the query
         String query = "SELECT  * FROM " + TABLE_STATIONS;
@@ -163,10 +167,10 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(query, null);
 
         // 3. go over each row, build station and add it to list
-        Station station = null;
+        BikeStation station = null;
         if (cursor.moveToFirst()) {
             do {
-                station = new Station();
+                station = new BikeStation();
                 station.setId(Integer.parseInt(cursor.getString(0)));
                 station.setNumber(Integer.parseInt(cursor.getString(1)));
                 station.setName(cursor.getString(2).toString());
@@ -191,7 +195,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         return stations;
     }
 
-    public int updateStation(Station station) {
+    public int updateBikeStation(BikeStation station) {
 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -222,7 +226,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    public void deleteStation(Station station) {
+    public void deleteStation(BikeStation station) {
 
         // 1. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
@@ -238,5 +242,21 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         //log
         Log.d("deleteStation", station.toString());
 
+    }
+
+    public void deleteAllStations(){
+        // 1. get reference to writable DB
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 2. delete
+        db.delete(TABLE_STATIONS, //table name
+                null,  // selections
+                null); //selections args
+
+        // 3. close
+        db.close();
+
+        //log
+        Log.d("deleteAllStations", "");
     }
 }

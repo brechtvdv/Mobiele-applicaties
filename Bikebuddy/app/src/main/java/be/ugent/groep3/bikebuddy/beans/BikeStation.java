@@ -10,6 +10,21 @@ public class BikeStation implements Serializable{
     String name,address,status;
     double longitude,latitude;
 
+    public BikeStation(){};
+
+    public BikeStation(int number, int bike_stands, int available_bikes_stands, int available_bikes, int bonuspoints, String name, String address, String status, double longitude, double latitude){
+        this.number = number;
+        this.bike_stands = bike_stands;
+        this.available_bike_stands = available_bikes_stands;
+        this.available_bikes = available_bikes;
+        this.bonuspoints = bonuspoints;
+        this.name = name;
+        this.address = address;
+        this.status = status;
+        this.longitude = longitude;
+        this.latitude = latitude;
+    }
+
     public int getId() {
         return id;
     }
@@ -82,19 +97,24 @@ public class BikeStation implements Serializable{
         this.status = status;
     }
 
-    public double getLong() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLong(double longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public double getLat() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLat(double latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
+    }
+
+    @Override
+    public String toString(){
+        return "Station ("+this.getId()+") " + this.name ;
     }
 }
