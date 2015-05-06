@@ -38,10 +38,10 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
     private List<LatLng> positions;
     private final double EDGE = 0.005;
     private ImageButton btnBack;
+    private BikeStation bikeStation;
 
     public DetailActivity() {
         positions = new ArrayList<>();
-        positions.add(new LatLng(51.031531, 3.702725));
     }
 
     @Override
@@ -51,7 +51,8 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
 
         // STATION OPHALEN:
         Intent intent = getIntent();
-        BikeStation bikeStation = (BikeStation) intent.getSerializableExtra("STATION");
+        bikeStation = (BikeStation) intent.getSerializableExtra("STATION");
+        positions.add(new LatLng(bikeStation.getLatitude(), bikeStation.getLongitude()));
 
         // ACTIONBAR:
         ActionBar actionBar = getActionBar();
@@ -143,7 +144,7 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
         for( LatLng pos : positions ) {
             googleMap.addMarker(new MarkerOptions()
                     .position(pos)
-                    .title("Marker"));
+                    .title(bikeStation.getName()));
         }
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override

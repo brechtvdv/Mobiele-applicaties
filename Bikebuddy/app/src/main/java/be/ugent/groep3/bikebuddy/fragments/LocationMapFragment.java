@@ -2,6 +2,7 @@ package be.ugent.groep3.bikebuddy.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.beans.BikeStation;
+import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 
 public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
@@ -29,7 +32,6 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     public LocationMapFragment() {
         // Required empty public constructor
         positions = new ArrayList<>();
-        positions.add(new LatLng(51.031531, 3.702725));
     }
 
     @Override
@@ -51,10 +53,15 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
 
     @Override
     public void onMapReady(final GoogleMap googleMap) {
-        for( LatLng pos : positions ) {
+        MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
+
+        for(BikeStation station : sqlite.getAllBikeStations()){
+            LatLng ll = new LatLng(station.getLatitude(), station.getLongitude());
+            Log.d("latlng", ll.latitude + "," + ll.longitude);
+            positions.add(ll);
             googleMap.addMarker(new MarkerOptions()
-                    .position(pos)
-                    .title("Marker"));
+                    .position(ll)
+                    .title(station.getName()));
         }
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override

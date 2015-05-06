@@ -84,7 +84,6 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
                     Reader reader = new InputStreamReader(source);
                     List<BikeStation> stations;
                     bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
-                    //Log.d("s",bikestations.toString());
 
                     for (BikeStation station : bikestations) sqlite.addBikeStation(station);
                 }
@@ -96,6 +95,11 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
                 e.printStackTrace();
             }
         } else {
+            // geheugen
+            for (BikeStation station : sqlite.getAllBikeStations()){
+                station.setBonuspoints(0);
+                sqlite.updateBikeStation(station);
+            }
             bikestations = sqlite.getAllBikeStations();
         }
 

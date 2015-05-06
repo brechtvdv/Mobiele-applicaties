@@ -110,10 +110,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addBikeStations(List<BikeStation> bikestations){
-        for(BikeStation station : bikestations) addBikeStation(station);
-    }
-
     public BikeStation getBikeStation(int id){
 
         // 1. get reference to readable DB
