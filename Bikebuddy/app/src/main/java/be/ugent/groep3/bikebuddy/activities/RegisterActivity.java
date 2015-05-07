@@ -64,6 +64,8 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         setContentView(R.layout.activity_register);
         Log.i("test","set layout RegisterActivity");
 
+        getActionBar().hide();
+
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
