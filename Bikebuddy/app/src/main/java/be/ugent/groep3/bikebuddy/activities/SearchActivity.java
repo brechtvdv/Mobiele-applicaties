@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,11 +36,11 @@ import be.ugent.groep3.bikebuddy.logica.PlaceAutocompleteAdapter;
 import be.ugent.groep3.bikebuddy.logica.RestClient;
 
 public class SearchActivity extends FragmentActivity
-        implements SeekBar.OnSeekBarChangeListener,View.OnClickListener,
-        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
+        implements SeekBar.OnSeekBarChangeListener, View.OnClickListener,
+        GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks {
 
     private final int MAX_DISTANCE = 2;
-    private final String [] radiusMessages = { "Not feeling it?", "Ok!","Good!","Very sportive!"};
+    private final String[] radiusMessages = {"Not feeling it?", "Ok!", "Good!", "Very sportive!"};
 
     /**
      * GoogleApiClient wraps our service connection to Google Play Services and provides access
@@ -84,7 +85,7 @@ public class SearchActivity extends FragmentActivity
         tv_radius = (TextView) findViewById(R.id.radius_result);
         sbDistance = (SeekBar) findViewById(R.id.seekbar_radius);
         sbDistance.setOnSeekBarChangeListener(this);
-        onProgressChanged(sbDistance,sbDistance.getProgress(),true);
+        onProgressChanged(sbDistance, sbDistance.getProgress(), true);
     }
 
     /**
@@ -216,8 +217,8 @@ public class SearchActivity extends FragmentActivity
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
         tv_radius.setText(
-                Double.toString(((double)(progress * MAX_DISTANCE)) / (double) seekBar.getMax()) + " km - "
-                + radiusMessages[((int) Math.floor((double) progress / (double) (seekBar.getMax()+1) * radiusMessages.length))]);
+                Double.toString(((double) (progress * MAX_DISTANCE)) / (double) seekBar.getMax()) + " km - "
+                        + radiusMessages[((int) Math.floor((double) progress / (double) (seekBar.getMax() + 1) * radiusMessages.length))]);
     }
 
     @Override
@@ -239,6 +240,13 @@ public class SearchActivity extends FragmentActivity
                 RestClient restClient = new RestClient(getResources().getString(R.string.rest_stations));
 
                 try {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ProgressBar pb = (ProgressBar) findViewById(R.id.pb_loading_rest);
+                            pb.setVisibility(ProgressBar.VISIBLE);
+                        }
+                    });
                     restClient.Execute(RestClient.RequestMethod.GET);
                     responsecode = 1;
                 } catch (Exception e) {
