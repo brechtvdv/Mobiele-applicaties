@@ -4,8 +4,4 @@
     android:shape="rectangle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <gradient
-        android:startColor="@color/list_row_start_color"
-        android:endColor="@color/list_row_end_color"
-        android:angle="270" />
 </shape>

@@ -15,4 +15,16 @@
     <string name="order_criteria">Order criteria</string>
     <string name="radio_points">Bonuspoints</string>
     <string name="radio_distance">Distance</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="btn_search">Search</string>
+
+    <!-- Detail activity -->
+    <string name="qr_text">When you return your bike, scan the QR code on the display to receive bonus points</string>
+
+    <!-- REST-SERVER -->
+    <string name="rest_login">http://n091-vm26-10.wall2.ilabt.iminds.be/auth/login</string>
+    <string name="rest_register">http://n091-vm26-10.wall2.ilabt.iminds.be/auth/register</string>
+    <string name="rest_stations">http://n091-vm26-10.wall2.ilabt.iminds.be/stations</string>
+    <string name="rest_scoreboard">http://n091-vm26-10.wall2.ilabt.iminds.be/scoreboard</string>
+
 </resources>

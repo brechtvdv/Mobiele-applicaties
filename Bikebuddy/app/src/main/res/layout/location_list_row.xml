@@ -9,6 +9,7 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
         android:scaleType="fitXY"
         android:src="@drawable/location_icon"/>
     <LinearLayout

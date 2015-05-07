@@ -50,6 +50,15 @@
             android:layout_height="wrap_content"
             android:text="@string/radio_distance"/>
     </RadioGroup>
+    <Button
+        android:id="@+id/btn_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:background="@color/fab_accent"
+        android:textColor="@color/btn_search_text"
+        android:text="@string/btn_search"
+        android:onClick="SearchSubmit"/>
 
 
 </LinearLayout>
