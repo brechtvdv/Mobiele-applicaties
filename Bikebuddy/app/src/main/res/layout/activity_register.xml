@@ -24,15 +24,21 @@
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified" android:inputType="textNoSuggestions"
                 android:maxLines="1" android:singleLine="true"
+                android:padding="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"/>
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/edit_text_style"/>
 
             <AutoCompleteTextView android:id="@+id/email" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:hint="@string/prompt_email"
                 android:inputType="textEmailAddress" android:maxLines="1"
                 android:singleLine="true"
+                android:padding="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"/>
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/edit_text_style"/>
 
             <EditText android:id="@+id/password" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:hint="@string/prompt_password"
@@ -40,8 +46,11 @@
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified" android:inputType="textPassword"
                 android:maxLines="1" android:singleLine="true"
+                android:padding="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"/>
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/edit_text_style"/>
 
             <EditText android:id="@+id/passwordcheck" android:layout_width="match_parent"
                 android:layout_height="wrap_content" android:hint="@string/prompt_password"
@@ -49,8 +58,11 @@
                 android:imeActionLabel="@string/action_sign_in_short"
                 android:imeOptions="actionUnspecified" android:inputType="textPassword"
                 android:maxLines="1" android:singleLine="true"
+                android:padding="10dp"
+                android:layout_marginBottom="15dp"
                 android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"/>
+                android:layout_marginLeft="50dp"
+                android:background="@drawable/edit_text_style"/>
 
 
             <Button android:id="@+id/register_button" style="?android:textAppearanceSmall"
