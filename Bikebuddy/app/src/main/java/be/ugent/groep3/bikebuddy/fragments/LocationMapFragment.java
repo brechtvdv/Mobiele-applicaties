@@ -1,7 +1,9 @@
 package be.ugent.groep3.bikebuddy.fragments;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +51,20 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
         MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+        Fragment fragment = (fm.findFragmentById(R.id.map));
+
+        if (fragment.isResumed()) {
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.remove(fragment);
+            ft.commit();
+        }
+        super.onDestroyView();
     }
 
     @Override
