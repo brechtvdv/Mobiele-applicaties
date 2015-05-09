@@ -4,4 +4,6 @@
     <!-- Strings related to login -->
     <string name="prompt_name">Username</string>
     <string name="action_login">Log in</string>
+
+    <string name="error_non_matching_password">The passwords are not the same</string>
 </resources>

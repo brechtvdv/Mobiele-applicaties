@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
-import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -19,20 +18,18 @@ import android.provider.ContactsContract;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.logica.RestClient;
 
 /**
  * A login screen that offers login via email/password.
@@ -52,31 +49,36 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     private UserLoginTask mAuthTask = null;
 
     // UI references.
+    private EditText mNameView;
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private EditText mPasswordCheckView;
     private View mProgressView;
     private View mLoginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i("test","onCreate Registeractivity");
+        Log.i("test", "onCreate Registeractivity");
         setContentView(R.layout.activity_register);
-        Log.i("test","set layout RegisterActivity");
+        Log.i("test", "set layout RegisterActivity");
 
         getActionBar().hide();
 
         // Set up the login form.
+        mNameView = (EditText) findViewById(R.id.name);
+
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordCheckView = (EditText) findViewById(R.id.passwordcheck);
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.register_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+        Button mRegisterButton = (Button) findViewById(R.id.register_button);
+        mRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptRegisterAndLogin();
             }
         });
 
@@ -100,18 +102,22 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void attemptLogin() {
+    public void attemptRegisterAndLogin() {
         if (mAuthTask != null) {
             return;
         }
 
         // Reset errors.
+        mNameView.setError(null);
         mEmailView.setError(null);
         mPasswordView.setError(null);
+        mPasswordCheckView.setError(null);
 
         // Store values at the time of the login attempt.
+        String name = mNameView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
+        String passwordCheck = mPasswordCheckView.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
@@ -120,6 +126,13 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         // Check for a valid password, if the user entered one.
         if (!TextUtils.isEmpty(password) && !isPasswordValid(password)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
+            focusView = mPasswordView;
+            cancel = true;
+        }
+
+        // Check if the passwords match
+        if( !password.equals(passwordCheck)){
+            mPasswordView.setError(getString(R.string.error_non_matching_password));
             focusView = mPasswordView;
             cancel = true;
         }
@@ -141,9 +154,9 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
-            // perform the user login attempt.
+            // perform the user register and login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(name, email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -254,10 +267,13 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        private final String mName;
         private final String mEmail;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
+
+        UserLoginTask(String name, String email, String password) {
+            mName = name;
             mEmail = email;
             mPassword = password;
         }
@@ -265,24 +281,25 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+            RestClient restClient = new RestClient(getResources().getString(R.string.rest_register));
 
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                //Thread.sleep(2000);
+                restClient.AddParam("name",mName);
+                restClient.AddParam("email",mEmail);
+                restClient.AddParam("password",mPassword);
+                restClient.Execute(RestClient.RequestMethod.POST);
+                Log.i("test", "executed the post");
             } catch (InterruptedException e) {
                 return false;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
+            String response = restClient.getResponse();
+            Log.i("test",response);
+            return false;
         }
 
         @Override
