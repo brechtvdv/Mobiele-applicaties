@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -15,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 
@@ -26,6 +29,8 @@ import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.fragments.LocationListFragment;
 import be.ugent.groep3.bikebuddy.fragments.LocationMapFragment;
+import be.ugent.groep3.bikebuddy.fragments.ScoreboardFragment;
+import be.ugent.groep3.bikebuddy.fragments.UserFragment;
 import be.ugent.groep3.bikebuddy.listeners.SimpleOnPageChangeListener;
 import be.ugent.groep3.bikebuddy.listeners.TabListener;
 
@@ -49,17 +54,13 @@ public class TabsActivity extends FragmentActivity {
         viewPager.setAdapter(tabsPagerAdapter);
 
         // Actionbar registreren:
-        actionBar = getActionBar();
-        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowHomeEnabled(false);
-        ActionBar.TabListener tabListener = new TabListener(viewPager);
-        for (int i = 0; i < tabsPagerAdapter.getCount(); i++) {
-            actionBar.addTab(actionBar.newTab()
-                    .setIcon(tabsPagerAdapter.getIcon(i))
-                    .setTabListener(tabListener));
-        }
+       getActionBar().hide();
         viewPager.setOnPageChangeListener(new SimpleOnPageChangeListener(actionBar));
+
+        // Give the PagerSlidingTabStrip the ViewPager
+        PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        // Attach the view pager to the tab strip
+        tabsStrip.setViewPager(viewPager);
 
         // Laat het toetsenbord niet zien:
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
@@ -82,23 +83,32 @@ public class TabsActivity extends FragmentActivity {
     }
 
     // Pager adapter voor het tonen van de verschillende tabpgn's:
-    public class TabsPagerAdapter extends FragmentStatePagerAdapter {
+    public class TabsPagerAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.IconTabProvider{
 
         private List<Fragment> fragments;
         private List<Integer> icons;
+        private List<String> titles;
 
         public TabsPagerAdapter(FragmentManager fm) {
             super(fm);
 
             fragments = new ArrayList<>();
             icons = new ArrayList<>();
+            titles = new ArrayList<>();
             fragments.add(new LocationListFragment());
             fragments.add(new LocationMapFragment());
+            fragments.add(new ScoreboardFragment());
+            fragments.add(new UserFragment());
             icons.add(R.drawable.list_icon);
             icons.add(R.drawable.location_menu_icon);
-        }
+            icons.add(R.drawable.leaderboard);
+            icons.add(R.drawable.profile);
+            titles.add("Location List");
+            titles.add("Location Map");
+            titles.add("Scoreboard");
+            titles.add("User Information");
 
-        public int getIcon(int i){ return icons.get(i); }
+        }
 
         @Override
         public Fragment getItem(int i) {
@@ -109,6 +119,13 @@ public class TabsActivity extends FragmentActivity {
         public int getCount() {
             return fragments.size();
         }
+
+        @Override
+        public int getPageIconResId(int i) {
+            return icons.get(i);
+        }
     }
+
+
 }
 

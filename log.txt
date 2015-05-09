@@ -1,0 +1,265 @@
+commit fed463c17fe048499cf45d826294b3ba44f0a751
+Merge: 7fb984e 506102a
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu May 7 20:17:00 2015 +0200
+
+    Merge branch 'development' of https://github.com/brechtvdv/Mobiele-applicaties into development
+
+commit 7fb984eaa4397974e98c4a96e169123587260b32
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu May 7 20:15:29 2015 +0200
+
+    Tabs bijgezet, fout met maps gefixt (2x naar map tabs zorgde voor crash)
+
+commit 9599c117b9e6704d5fdf5b9f81e7f76eebd4d239
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu May 7 11:27:59 2015 +0200
+
+    Zoekfunctionaliteit uitgebreid met spinner
+
+commit 70b3a26f147f6750b1385c719d356740a86f6d82
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu May 7 11:06:16 2015 +0200
+
+    Afbeeldingen toegevoegd
+
+commit 506102ad7a181f6641fe0b52df5d4bd91969542f
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Thu May 7 10:19:07 2015 +0200
+
+    layout fields register login
+
+commit 58de761d1d7910fd57dc50306d63bba0a2e1288c
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Thu May 7 09:45:08 2015 +0200
+
+    Register Login color buttons
+    
+    De knoppen voor e achtergrondkleur aangepast.
+
+commit 946c4b36534821cf829c45a2cf6447c882f18e66
+Merge: d8e95f9 11ef972
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Thu May 7 09:21:27 2015 +0200
+
+    Merge remote-tracking branch 'origin/development' into development
+    
+    Conflicts:
+    	Bikebuddy/app/src/main/AndroidManifest.xml
+    Resolved
+
+commit d8e95f9761e5f24cea1ed0977006b58a8952809f
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Thu May 7 09:10:26 2015 +0200
+
+    ScoreBoard
+    
+    Begonnen met score bord toe te voegen
+
+commit 11ef97252cf0679cc1097efe8a29bfe2b879e841
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Wed May 6 16:41:53 2015 +0200
+
+    Detail marker shows name
+
+commit f70fb992b7cdff13fd001d39697eb0411b8aff3c
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Wed May 6 16:15:18 2015 +0200
+
+    Change latlong to doubles instead of floats for precision
+
+commit ceaba5423c4c8e41f5ae754cafa259b78edb900f
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Wed May 6 14:56:27 2015 +0200
+
+    Load stations in SQLite and show
+
+commit 043b6972b4f2f39ef14541bc640cae047f41c7f2
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Wed May 6 14:04:52 2015 +0200
+
+    Login+register layout
+    
+    layout en flow van register en layout aangepast
+
+commit ac544e768cd5e2eb93e3f81a218f80c729331a95
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Wed May 6 10:23:37 2015 +0200
+
+    Logo and change startname
+
+commit 2c1b086fc410a5ddf98c1ad333bbcc4559479869
+Merge: 32ae6b2 8749c71
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Tue May 5 11:52:31 2015 +0200
+
+    Merge branch 'standaard-flow' of github.com:brechtvdv/Mobiele-applicaties into Android
+
+commit 8749c71d3688d70b02bd698f91ba96b7c588ed23
+Merge: 53acc3b fbf0e92
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Mon May 4 18:17:11 2015 +0200
+
+    Merge branch 'master' of https://github.com/brechtvdv/Mobiele-applicaties into standaard-flow
+
+commit 53acc3b151a1df05afd9774bd485d025fc6b912c
+Merge: b3916b0 da49f80
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Mon May 4 18:16:09 2015 +0200
+
+    Merge branch 'development' of https://github.com/brechtvdv/Mobiele-applicaties into standaard-flow
+
+commit b3916b028d27d281368293517138881cf9d5c2bd
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Mon May 4 18:14:35 2015 +0200
+
+    Laatste versie applicatie
+
+commit 32ae6b21164e30ee03566ca950c58744908d54b3
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Mon May 4 13:21:46 2015 +0200
+
+    Station bean + SQLite helper class
+
+commit fbf0e92d792a0dfcde3b95959520124aeb1db614
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Mon May 4 10:07:47 2015 +0200
+
+    Change lat/long to latitude/longitude
+
+commit 9723f863ab4ba9b42bc35f9649f01a0db32ad628
+Merge: 55de182 da49f80
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Fri May 1 15:37:56 2015 +0200
+
+    Back-end supports stations- and userstable with routes
+
+commit da49f80c18497373580165b15c6f6968b57ed233
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Fri May 1 15:27:36 2015 +0200
+
+    User- and Stationtable with routes
+
+commit bc3fe5b89ee5f2a8cbf5de1d6851bb1656a7bf88
+Merge: 3d10449 55de182
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu Apr 30 18:24:17 2015 +0200
+
+    Merge branch 'master' of https://github.com/brechtvdv/Mobiele-applicaties into standaard-flow
+
+commit 3d1044912517f5cdc0ccf28b566ab4e0b841530c
+Merge: 4350862 c32840d
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu Apr 30 18:23:24 2015 +0200
+
+    Merge branch 'development' of https://github.com/brechtvdv/Mobiele-applicaties into standaard-flow
+
+commit 4350862b069016957fbabc8ff636e113e3e37c17
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu Apr 30 18:20:48 2015 +0200
+
+    Detailscherm afgewerkt
+
+commit 55de1823ba13beaceab5785368ab6ffb968cbfd6
+Merge: 1ca3d27 c32840d
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Thu Apr 30 11:22:38 2015 +0200
+
+    Merge branch 'development'
+
+commit c32840d033095c8d96cd09cbf05979fed1bd2d51
+Merge: 0ef9130 2abcb5e
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Thu Apr 30 11:19:54 2015 +0200
+
+    Merge branch 'PHP-backend' into development
+
+commit 2abcb5e8e15ca6b3137770759a19234e36181afa
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Thu Apr 30 11:19:25 2015 +0200
+
+    Laravel framework
+
+commit 9e33487f40e7617a43c168cdc57ad82536423ae8
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Thu Apr 30 10:10:50 2015 +0200
+
+    Androidmanifest registeractivity
+    
+    registeractivity gecoriceerde name
+
+commit 1ca3d270531a13e150278b038211f6f8440f0dd7
+Merge: 3ca9a63 0ef9130
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Thu Apr 30 09:58:23 2015 +0200
+
+    Merge remote-tracking branch 'origin/master'
+    
+    Conflicts:
+    	Bikebuddy/app/src/main/AndroidManifest.xml
+    Solved conflict
+
+commit 3ca9a63e66eb6c9b194816b816476622c624a9ae
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Thu Apr 30 09:31:07 2015 +0200
+
+    Register and flow
+    
+    Register en flow tussen register, flow en andere schermen toegevoegd.
+
+commit 0ef9130f72401aa8daa053c8f6f1910d04b355a5
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Wed Apr 29 22:44:00 2015 +0200
+
+    Zoekscherm bijgevoegd
+
+commit 33d4b132318fc9febe38da07cc4f809553659105
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Tue Apr 28 15:49:03 2015 +0200
+
+    Delete Java Restserver
+
+commit 0b71e60f55cbb99457b1a8bcce55155e40803b92
+Author: sdghelde <Sam.Degheldere@UGent.be>
+Date:   Sun Apr 26 16:21:23 2015 +0200
+
+    Login
+    
+    Basis van login toegevoegd en navigatie naar tabs activity
+
+commit 31b09975a9928be3e1a18b00de98e4074ef8f2a7
+Merge: 15a0140 acaa7be
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Sun Apr 26 11:57:43 2015 +0200
+
+    Merge branch 'master' of https://github.com/brechtvdv/Mobiele-applicaties
+
+commit 15a01403dd306a7843b2935cabcf7d4420e71f1a
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Sun Apr 26 11:56:54 2015 +0200
+
+    Kaartdata + lijst
+
+commit acaa7be1a074545358f16699e743809a96aa1679
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Thu Apr 23 10:42:36 2015 +0200
+
+    Add gitignore
+
+commit 6097ed12e63615289a39279877fc0641eb046418
+Author: jabauwen <jabauwen.bauwens@ugent.be>
+Date:   Thu Apr 23 09:49:44 2015 +0200
+
+    Project aangemaakt
+
+commit 2e1caf92cdf1c331ba43e0fb9a35c5e70d73fb3b
+Author: brechtvdv <br5cht@hotmail.com>
+Date:   Tue Apr 21 15:44:39 2015 +0200
+
+    Files from other ugent repo
+
+commit 8e1a278af1526078e68aecd518545b1f946106ec
+Author: Brecht Van de Vyvere <br5cht@hotmail.com>
+Date:   Tue Apr 21 15:10:05 2015 +0200
+
+    Initial commit

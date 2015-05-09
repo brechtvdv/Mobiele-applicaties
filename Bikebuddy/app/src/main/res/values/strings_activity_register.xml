@@ -2,6 +2,6 @@
     <string name="title_activity_register">Sign up</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_name">Volledige Naam</string>
+    <string name="prompt_name">Username</string>
     <string name="action_login">Log in</string>
 </resources>

@@ -1,8 +1,11 @@
 package be.ugent.groep3.bikebuddy.fragments;
 
+import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +34,7 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     private final double EDGE = 0.05;
     private GoogleMap googleMap;
     private int previous = 0; // locations
+    private static View view;
 
     public LocationMapFragment() {
         // Required empty public constructor
@@ -46,8 +50,17 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_location_map, container, false);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try{
+            // Inflate the layout for this fragment
+            view = inflater.inflate(R.layout.fragment_location_map, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
 
         MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -61,11 +74,25 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     }
 
     @Override
-    public void setUserVisibleHint(boolean visible){
+    public void setUserVisibleHint(boolean visible) {
         super.setUserVisibleHint(visible);
-        if (visible && isResumed()){
+        if (visible && isResumed()) {
             UIUpdate();
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+
+//        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+//        Fragment fragment = (fm.findFragmentById(R.id.map));
+//
+//        if (fragment.isResumed()) {
+//            FragmentTransaction ft = fm.beginTransaction();
+//            //ft.remove(fragment);
+//            ft.commit();
+//        }
+    super.onDestroyView();
     }
 
     private LatLngBounds calculateBoundingBox(){

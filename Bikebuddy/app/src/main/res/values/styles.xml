@@ -5,8 +5,16 @@
         <item name="android:backgroundSplit">@color/sa</item>
     </style>
 
+    <style name="ActionBarTab" parent="android:style/Widget.Holo.Light.Tab"> <!-- This style kills the design -->
+        <item name="android:maxWidth">3dp</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:layout_margin">0dp</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
         <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTab</item>
     </style>
 </resources>
