@@ -15,8 +15,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -119,9 +121,10 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
                 LatLng ll = new LatLng(station.getLatitude(), station.getLongitude());
                 Log.d("latlng", ll.latitude + "," + ll.longitude);
                 positions.add(ll);
-                googleMap.addMarker(new MarkerOptions()
+                Marker m = googleMap.addMarker(new MarkerOptions()
                         .position(ll)
                         .title(station.getName()));
+                if(station.getBonuspoints()>0) m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             }
         }
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {

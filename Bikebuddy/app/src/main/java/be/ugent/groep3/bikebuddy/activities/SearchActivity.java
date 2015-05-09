@@ -9,6 +9,8 @@ import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -31,6 +33,9 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +44,7 @@ import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.logica.PlaceAutocompleteAdapter;
 import be.ugent.groep3.bikebuddy.logica.RestClient;
+import be.ugent.groep3.bikebuddy.logica.Tools;
 import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 public class SearchActivity extends FragmentActivity
@@ -301,6 +307,27 @@ public class SearchActivity extends FragmentActivity
             }
         }
 
+        updateExistingStations();
+
         return ids;
+    }
+
+    private void updateExistingStations(){
+        if(Tools.isInternetAvailable(this.getApplicationContext())){
+            MySQLiteHelper sqlite = new MySQLiteHelper(this);
+
+            InputStream source = Tools.retrieveStream(getResources().getString(R.string.rest_stations));
+            Gson gson = new Gson();
+            Reader reader = new InputStreamReader(source);
+            List<BikeStation> stations;
+            stations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
+            for(BikeStation station : stations){
+                BikeStation s = sqlite.getBikeStation(station.getId());
+                s.setBonuspoints(station.getBonuspoints());
+                s.setAvailable_bike_stands(station.getAvailable_bike_stands());
+                s.setAvailable_bikes(station.getAvailable_bikes());
+                sqlite.updateBikeStation(s);
+            }
+        }
     }
 }

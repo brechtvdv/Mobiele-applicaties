@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +39,7 @@ import be.ugent.groep3.bikebuddy.activities.DetailActivity;
 import be.ugent.groep3.bikebuddy.activities.SearchActivity;
 import be.ugent.groep3.bikebuddy.activities.TabsActivity;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
+import be.ugent.groep3.bikebuddy.logica.Tools;
 import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 
@@ -72,20 +74,27 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
         MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
 
         // aantal stations opvragen in geheugen
-        // indien 0, opvragen van RESTserver
-        int aantal = sqlite.getAllBikeStations().size();
+        final int aantal = sqlite.getAllBikeStations().size();
 
-        if(aantal==0) {
+        if(Tools.isInternetAvailable(this.getActivity().getApplicationContext())) {
             Thread t = new Thread(new Runnable() {
                 public void run() {
                     MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
-                    InputStream source = retrieveStream(getResources().getString(R.string.rest_stations));
+                    InputStream source = Tools.retrieveStream(getResources().getString(R.string.rest_stations));
                     Gson gson = new Gson();
                     Reader reader = new InputStreamReader(source);
-                    List<BikeStation> stations;
                     TabsActivity.bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
 
-                    for (BikeStation station : TabsActivity.bikestations) sqlite.addBikeStation(station);
+                    for (BikeStation station : TabsActivity.bikestations) {
+                        if(aantal == 0) sqlite.addBikeStation(station);
+                        else{ // update with realtime info
+                            BikeStation s = sqlite.getBikeStation(station.getId());
+                            s.setBonuspoints(station.getBonuspoints());
+                            s.setAvailable_bike_stands(station.getAvailable_bike_stands());
+                            s.setAvailable_bikes(station.getAvailable_bikes());
+                            sqlite.updateBikeStation(s);
+                        }
+                    }
                 }
             });
             t.start();
@@ -103,41 +112,10 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             }
             TabsActivity.bikestations = sqlite.getAllBikeStations();
         }
-        //adapter = new CustomListAdapter(getActivity(),TabsActivity.bikestations,this);
-        //listView.setAdapter(adapter);
+
         updateGUIList();
 
         return view;
-    }
-
-    private InputStream retrieveStream(String url) {
-
-        DefaultHttpClient client = new DefaultHttpClient();
-
-        HttpGet getRequest = new HttpGet(url);
-
-        try {
-
-            HttpResponse getResponse = client.execute(getRequest);
-            final int statusCode = getResponse.getStatusLine().getStatusCode();
-
-            if (statusCode != HttpStatus.SC_OK) {
-                Log.w(getClass().getSimpleName(),
-                        "Error " + statusCode + " for URL " + url);
-                return null;
-            }
-
-            HttpEntity getResponseEntity = getResponse.getEntity();
-            return getResponseEntity.getContent();
-
-        }
-        catch (IOException e) {
-            getRequest.abort();
-            Log.w(getClass().getSimpleName(), "Error for URL " + url, e);
-        }
-
-        return null;
-
     }
 
     @Override
@@ -240,7 +218,6 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
                 convertView = inflater.inflate(R.layout.location_list_row, null);
 
             // Bikelocations in component steken:
-            sortByDistance();
             BikeStation bikestation = bikeLocations.get(position);
             TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(bikestation.getName());
