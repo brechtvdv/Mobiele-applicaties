@@ -289,6 +289,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
                 restClient.AddParam("name",mName);
                 restClient.AddParam("email",mEmail);
                 restClient.AddParam("password",mPassword);
+                restClient.AddParam("password_confirmation",mPassword);
                 restClient.Execute(RestClient.RequestMethod.POST);
                 Log.i("test", "executed the post");
             } catch (InterruptedException e) {
@@ -299,7 +300,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
             String response = restClient.getResponse();
             Log.i("test",response);
-            return false;
+            return response.contains("You are logged in!");
         }
 
         @Override

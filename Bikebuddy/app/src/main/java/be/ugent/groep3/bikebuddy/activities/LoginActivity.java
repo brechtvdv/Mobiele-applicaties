@@ -314,6 +314,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             }
 
             String response = restClient.getResponse();
+            Log.i("test",response);
 
             return response.contains("You are logged in!");
         }
