@@ -30,8 +30,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.logica.RestClient;
 
 /**
  * A login screen that offers login via email/password.
@@ -297,23 +300,22 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
             Log.i("test","startDoInBackground");
+            RestClient restClient = new RestClient(getResources().getString(R.string.rest_login));
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
+                //Thread.sleep(2000);
+                restClient.AddParam("email",mEmail);
+                restClient.AddParam("password",mPassword);
+                restClient.Execute(RestClient.RequestMethod.POST);
             } catch (InterruptedException e) {
                 return false;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
+            String response = restClient.getResponse();
 
-            // TODO: register the new account here.
-            return true;
+            return response.contains("You are logged in!");
         }
 
         @Override
