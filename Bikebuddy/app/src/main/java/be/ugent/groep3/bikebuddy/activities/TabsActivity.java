@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.fragments.LocationListFragment;
 import be.ugent.groep3.bikebuddy.fragments.LocationMapFragment;
 import be.ugent.groep3.bikebuddy.listeners.SimpleOnPageChangeListener;
@@ -34,6 +35,8 @@ public class TabsActivity extends FragmentActivity {
     private TabsPagerAdapter tabsPagerAdapter;
     private ViewPager viewPager;
     private ActionBar actionBar;
+
+    public static List<BikeStation> bikestations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

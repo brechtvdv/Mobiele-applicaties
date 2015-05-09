@@ -29,10 +29,15 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import be.ugent.groep3.bikebuddy.CustomViews.ClearableAutoCompleteTextView;
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.logica.PlaceAutocompleteAdapter;
 import be.ugent.groep3.bikebuddy.logica.RestClient;
+import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 public class SearchActivity extends FragmentActivity
         implements SeekBar.OnSeekBarChangeListener,View.OnClickListener,
@@ -52,6 +57,8 @@ public class SearchActivity extends FragmentActivity
     private PlaceAutocompleteAdapter mAdapter;
     private static final LatLngBounds MAPS_BOUNDS = new LatLngBounds(
             new LatLng(48.993117, 1.906756), new LatLng(51.602933, 6.499041));
+
+    private Place place;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +142,7 @@ public class SearchActivity extends FragmentActivity
                 return;
             }
             // Get the Place object from the buffer.
-            final Place place = places.get(0);
+            place = places.get(0);
 
             /* Format details of the place for display and show it in a TextView.
             mPlaceDetailsText.setText(formatPlaceDetails(getResources(), place.getName(),
@@ -234,23 +241,51 @@ public class SearchActivity extends FragmentActivity
         new Thread(new Runnable() {
             public void run() {
                 double distance = ((double) (sbDistance.getProgress() * MAX_DISTANCE)) / (double) sbDistance.getMax();
-                int responsecode = 0;
 
-                RestClient restClient = new RestClient(getResources().getString(R.string.rest_stations));
-
-                try {
-                    restClient.Execute(RestClient.RequestMethod.GET);
-                    responsecode = 1;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                String response = restClient.getResponse();
                 Intent intent = new Intent();
-                intent.putExtra("STATIONS", response);
-                setResult(responsecode, intent);
+                intent.putExtra("STATIONIDS", getStationIDs(place, distance));
+
+                setResult(2,intent);
+
                 finish();
             }
         }).start();
+    }
+
+    public ArrayList<Integer> getStationIDs(Place place, double radius){
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+
+        MySQLiteHelper sqlite = new MySQLiteHelper(this);
+        for(BikeStation station : sqlite.getAllBikeStations()){
+            // Haversine formule
+            double R = 6372.8; // In kilometers
+            double lat1 = station.getLatitude();
+            double lat2 = place.getLatLng().latitude;
+            double lon1 = station.getLongitude();
+            double lon2 = place.getLatLng().longitude;
+            double φ1 = Math.toRadians(lat1);
+            double φ2 = Math.toRadians(lat2);
+            double Δφ = Math.toRadians(lat2 - lat1);
+            double Δλ = Math.toRadians(lon2 - lon1);
+
+            double a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+                    Math.cos(φ1) * Math.cos(φ2) *
+                            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+            double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+            double d = R * c;
+
+            if(d<=radius){
+                station.setDistance((int) (d*1000));
+                sqlite.updateBikeStation(station);
+                ids.add(station.getId());
+            }
+            else if(station.getDistance() != 0){
+                station.setDistance(0);
+                sqlite.updateBikeStation(station);
+            }
+        }
+
+        return ids;
     }
 }

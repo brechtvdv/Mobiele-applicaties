@@ -36,6 +36,7 @@ import java.util.List;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.activities.DetailActivity;
 import be.ugent.groep3.bikebuddy.activities.SearchActivity;
+import be.ugent.groep3.bikebuddy.activities.TabsActivity;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.beans.Bikelocation;
 import be.ugent.groep3.bikebuddy.logica.RestClient;
@@ -48,9 +49,9 @@ import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 public class LocationListFragment extends Fragment implements View.OnClickListener {
 
     private final int RESULT_OK = 1;
-    private List<BikeStation> bikestations;
+    // public static List<BikeStation> bikestations;
     private ListView listView;
-    private ProgressBar spinner;
+    Double[] place;
 
     public LocationListFragment() {}
 
@@ -83,9 +84,9 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
                     Gson gson = new Gson();
                     Reader reader = new InputStreamReader(source);
                     List<BikeStation> stations;
-                    bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
+                    TabsActivity.bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
 
-                    for (BikeStation station : bikestations) sqlite.addBikeStation(station);
+                    for (BikeStation station : TabsActivity.bikestations) sqlite.addBikeStation(station);
                 }
             });
             t.start();
@@ -98,9 +99,10 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             // geheugen
             for (BikeStation station : sqlite.getAllBikeStations()){
                 station.setBonuspoints(0);
+                station.setDistance(0);
                 sqlite.updateBikeStation(station);
             }
-            bikestations = sqlite.getAllBikeStations();
+            TabsActivity.bikestations = sqlite.getAllBikeStations();
         }
 
         updateGUIList();
@@ -154,20 +156,20 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if ( requestCode == 0 ){
-            // Als de resultcode 0 is: geslaagd
-            if ( resultCode == RESULT_OK ){
-                String result = data.getStringExtra("STATIONS");
-                Gson gson = new Gson();
-                bikestations =
-                        gson.fromJson(result, new TypeToken<List<BikeStation>>() {}.getType());
-                updateGUIList();
-            }
-        }
+        final Bundle extraBundle = data.getExtras();
+
+        ArrayList<Integer> stationids = extraBundle.getIntegerArrayList("STATIONIDS");
+        MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
+
+        TabsActivity.bikestations.clear();
+        listView.invalidateViews();
+        for(Integer i : stationids) TabsActivity.bikestations.add(sqlite.getBikeStation(i));
+
+        updateGUIList();
     }
 
     private void updateGUIList(){
-        listView.setAdapter(new CustomListAdapter(getActivity(),bikestations,this));
+        listView.setAdapter(new CustomListAdapter(getActivity(),TabsActivity.bikestations,this));
     }
 
     private class CustomListAdapter extends BaseAdapter{
@@ -207,7 +209,7 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
                 convertView = inflater.inflate(R.layout.location_list_row, null);
 
             // Bikelocations in component steken:
-            BikeStation bikestation = bikestations.get(position);
+            BikeStation bikestation = TabsActivity.bikestations.get(position);
             TextView name = (TextView) convertView.findViewById(R.id.name);
             name.setText(bikestation.getName());
             TextView address = (TextView) convertView.findViewById(R.id.address);
@@ -215,7 +217,7 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             TextView points = (TextView) convertView.findViewById(R.id.points);
             points.setText(Integer.toString(bikestation.getBonuspoints()));
             TextView distance = (TextView) convertView.findViewById(R.id.distance);
-            distance.setText(Integer.toString(0) + "m");
+            distance.setText(bikestation.getDistance() + "m");
             convertView.setTag(convertView.getId(),bikestation);
             convertView.setOnClickListener(fragment);
 

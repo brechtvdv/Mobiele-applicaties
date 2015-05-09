@@ -13,7 +13,7 @@
     <be.ugent.groep3.bikebuddy.CustomViews.ClearableAutoCompleteTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="autocomplete_hint"
+        android:hint="@string/searchHint"
         android:id="@+id/ab_location_search"
         android:textColor="@android:color/primary_text_light"
         android:layout_gravity="center_horizontal"/>

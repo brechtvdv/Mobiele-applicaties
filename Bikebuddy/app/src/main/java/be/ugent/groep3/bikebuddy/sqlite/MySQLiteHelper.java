@@ -44,7 +44,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 "bike_stands INTEGER, "+
                 "available_bike_stands INTEGER, "+
                 "available_bikes INTEGER, "+
-                "bonuspoints INTEGER)";
+                "bonuspoints INTEGER, "+
+                "distance)";
 
         // create books table
         db.execSQL(CREATE_STATION_TABLE);
@@ -78,8 +79,9 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String KEY_AVAILABLE_BIKE_STANDS = "available_bike_stands";
     private static final String KEY_AVAILABLE_BIKES = "available_bikes";
     private static final String KEY_BONUSPOINTS = "bonuspoints";
+    private static final String KEY_DISTANCE = "distance";
 
-    private static final String[] COLUMNS = {KEY_ID,KEY_NUMBER,KEY_NAME,KEY_ADDRESS,KEY_LONGITUDE,KEY_LATITUDE,KEY_STATUS,KEY_BIKE_STANDS,KEY_AVAILABLE_BIKE_STANDS,KEY_AVAILABLE_BIKES,KEY_BONUSPOINTS};
+    private static final String[] COLUMNS = {KEY_ID,KEY_NUMBER,KEY_NAME,KEY_ADDRESS,KEY_LONGITUDE,KEY_LATITUDE,KEY_STATUS,KEY_BIKE_STANDS,KEY_AVAILABLE_BIKE_STANDS,KEY_AVAILABLE_BIKES,KEY_BONUSPOINTS,KEY_DISTANCE};
 
     public void addBikeStation(BikeStation station){
         //for logging
@@ -100,6 +102,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(KEY_AVAILABLE_BIKE_STANDS, station.getAvailable_bike_stands()); // get number of available bike stands
         values.put(KEY_AVAILABLE_BIKES, station.getAvailable_bikes()); // get number of available bikes
         values.put(KEY_BONUSPOINTS, station.getBonuspoints()); // get number of bonuspoints
+        values.put(KEY_DISTANCE, 0); // holds distance to destination
 
         // 3. insert
         db.insert(TABLE_STATIONS, // table
@@ -132,7 +135,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 4. build station object
         BikeStation station = new BikeStation();
-        station.setId(Integer.parseInt(cursor.getString(0)));
+        station.setId(cursor.getInt(0));
         station.setNumber(cursor.getInt(1));
         station.setName(cursor.getString(2));
         station.setAddress(cursor.getString(3));
@@ -143,7 +146,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         station.setAvailable_bike_stands(cursor.getInt(8));
         station.setAvailable_bikes(cursor.getInt(9));
         station.setBonuspoints(cursor.getInt(10));
-
+        station.setDistance(cursor.getInt(11));
 
         //log
         Log.d("getStation(" + id + ")", station.toString());
@@ -178,6 +181,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 station.setAvailable_bike_stands(Integer.parseInt(cursor.getString(8)));
                 station.setAvailable_bikes(Integer.parseInt(cursor.getString(9)));
                 station.setBonuspoints(Integer.parseInt(cursor.getString(10)));
+                station.setDistance(Integer.parseInt(cursor.getString(11)));
 
 
                 // Add book to books
@@ -208,6 +212,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
         values.put(KEY_AVAILABLE_BIKE_STANDS, station.getAvailable_bike_stands()); // get number of available bike stands
         values.put(KEY_AVAILABLE_BIKES, station.getAvailable_bikes()); // get number of available bikes
         values.put(KEY_BONUSPOINTS, station.getBonuspoints()); // get number of bonuspoints
+        values.put(KEY_DISTANCE, station.getDistance()); // get number of bonuspoints
 
         // 3. updating row
         int i = db.update(TABLE_STATIONS, //table

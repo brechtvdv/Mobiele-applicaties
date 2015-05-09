@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.activities.TabsActivity;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
@@ -28,6 +29,8 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
 
     private List<LatLng> positions;
     private final double EDGE = 0.05;
+    private GoogleMap googleMap;
+    private int previous = 0; // locations
 
     public LocationMapFragment() {
         // Required empty public constructor
@@ -52,23 +55,17 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     }
 
     @Override
-    public void onMapReady(final GoogleMap googleMap) {
-        MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
+    public void onMapReady(GoogleMap googleMap) {
+        this.googleMap = googleMap;
+        UIUpdate();
+    }
 
-        for(BikeStation station : sqlite.getAllBikeStations()){
-            LatLng ll = new LatLng(station.getLatitude(), station.getLongitude());
-            Log.d("latlng", ll.latitude + "," + ll.longitude);
-            positions.add(ll);
-            googleMap.addMarker(new MarkerOptions()
-                    .position(ll)
-                    .title(station.getName()));
+    @Override
+    public void setUserVisibleHint(boolean visible){
+        super.setUserVisibleHint(visible);
+        if (visible && isResumed()){
+            UIUpdate();
         }
-        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-            @Override
-            public void onMapLoaded() {
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(calculateBoundingBox(), 0));
-            }
-        });
     }
 
     private LatLngBounds calculateBoundingBox(){
@@ -85,5 +82,26 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
         return new LatLngBounds(
                 new LatLng(minLat - EDGE, minLong - EDGE),
                 new LatLng(maxLat + EDGE, maxLong + EDGE));
+    }
+
+    private void UIUpdate(){
+        if(previous != TabsActivity.bikestations.size()) {
+            positions.clear();
+            googleMap.clear();
+            for (BikeStation station : TabsActivity.bikestations) {
+                LatLng ll = new LatLng(station.getLatitude(), station.getLongitude());
+                Log.d("latlng", ll.latitude + "," + ll.longitude);
+                positions.add(ll);
+                googleMap.addMarker(new MarkerOptions()
+                        .position(ll)
+                        .title(station.getName()));
+            }
+        }
+        googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(calculateBoundingBox(), 0));
+            }
+        });
     }
 }
