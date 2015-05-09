@@ -26,6 +26,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -242,6 +243,8 @@ public class SearchActivity extends FragmentActivity
         new Thread(new Runnable() {
             public void run() {
                 double distance = ((double) (sbDistance.getProgress() * MAX_DISTANCE)) / (double) sbDistance.getMax();
+                RadioButton rbDistance;
+                rbDistance = (RadioButton) findViewById(R.id.radio_distance);
 
                 try {
                     runOnUiThread(new Runnable() {
@@ -253,7 +256,9 @@ public class SearchActivity extends FragmentActivity
                     });
                     Intent intent = new Intent();
                     intent.putExtra("STATIONIDS", getStationIDs(place, distance));
-                    setResult(2,intent);
+                    if(rbDistance.isChecked()) intent.putExtra("SORTCRITERIA","DISTANCE");
+                    else intent.putExtra("SORTCRITERIA","BONUSPOINTS");
+                    setResult(2, intent);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
