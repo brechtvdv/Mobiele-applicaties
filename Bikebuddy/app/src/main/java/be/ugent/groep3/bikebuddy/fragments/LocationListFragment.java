@@ -103,6 +103,8 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
+            sortByBonuspoints();
         } else {
             // geheugen
             for (BikeStation station : sqlite.getAllBikeStations()){

@@ -70,13 +70,13 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
         TextView tvName = (TextView) findViewById(R.id.tv_detail_name);
         TextView tvAddress = (TextView) findViewById(R.id.tv_detail_address);
         TextView tvBonus = (TextView) findViewById(R.id.tv_detail_points);
+        TextView tvAvailableBikes = (TextView) findViewById(R.id.tv_detail_available_bikes);
         ImageButton btnScan = (ImageButton) findViewById(R.id.scan_button);
-
-        // DUMMY DATA:
 
         tvName.setText(bikeStation.getName());
         tvAddress.setText(bikeStation.getAddress());
         tvBonus.setText(Integer.toString(bikeStation.getBonuspoints()));
+        tvAvailableBikes.setText(Integer.toString(bikeStation.getAvailable_bikes()) + "/" + Integer.toString(bikeStation.getBike_stands()));
         btnScan.setOnClickListener(this);
 
         // KAART INLADEN:

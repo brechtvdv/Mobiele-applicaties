@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration {
 			$table->string('password', 60);
 			$table->integer('bonuspoints');
 			$table->integer('bonusdays');
-			$table->boolean('visible');
+			$table->boolean('visible')->default(1);
 			$table->rememberToken();
 			$table->timestamps();
 		});
