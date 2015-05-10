@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.logica.RestClient;
 
@@ -105,15 +106,29 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mProgressView = findViewById(R.id.login_progress);
     }
 
+    @Override
+    protected void onResume(){
+        super.onResume();
+        Log.i("test", "checking data singleton");
+        if(DataSingleton.getData().getEmail() != null && DataSingleton.getData().getName() != null){
+            Log.i("test", "attempt login");
+            finish();
+            Intent intent = new Intent(this, TabsActivity.class);
+            startActivity(intent);
+
+        }
+    }
+
     private void attemptLoginOffline() {
         Intent intent = new Intent(this, TabsActivity.class);
         startActivity(intent);
     }
 
     private void attemptRegister() {
-        Log.i("test","attempt intent open");
+        Log.i("test", "attempt intent open");
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
+
     }
 
     private void populateAutoComplete() {
@@ -298,7 +313,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // attempt authentication against a network service.
             Log.i("test","startDoInBackground");
             RestClient restClient = new RestClient(getResources().getString(R.string.rest_login));
             try {
@@ -326,9 +341,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             if (success) {
                 finish();
-                Log.i("test","Login is a succes");
                 Intent intent = new Intent(ctx, TabsActivity.class);
                 startActivity(intent);
+
+                Log.i("test", "Login is a succes");
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
