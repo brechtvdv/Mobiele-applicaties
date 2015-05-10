@@ -23,18 +23,27 @@ import android.widget.TextView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
+import be.ugent.groep3.bikebuddy.beans.User;
 import be.ugent.groep3.bikebuddy.fragments.LocationListFragment;
 import be.ugent.groep3.bikebuddy.fragments.LocationMapFragment;
 import be.ugent.groep3.bikebuddy.fragments.ScoreboardFragment;
 import be.ugent.groep3.bikebuddy.fragments.UserFragment;
 import be.ugent.groep3.bikebuddy.listeners.SimpleOnPageChangeListener;
 import be.ugent.groep3.bikebuddy.listeners.TabListener;
+import be.ugent.groep3.bikebuddy.logica.RestClient;
+import be.ugent.groep3.bikebuddy.logica.Tools;
+import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 
 public class TabsActivity extends FragmentActivity {
@@ -44,6 +53,7 @@ public class TabsActivity extends FragmentActivity {
     private ActionBar actionBar;
 
     public static List<BikeStation> bikestations;
+    public static List<User> users;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +77,84 @@ public class TabsActivity extends FragmentActivity {
         // Laat het toetsenbord niet zien:
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        loadStations();
+
+        loadUsers();
+    }
+
+    private void loadUsers() {
+        // online
+        if(Tools.isInternetAvailable(getApplicationContext()) ) {
+            if (Tools.isInternetAvailable(getApplicationContext())) {
+                Thread t = new Thread(new Runnable() {
+                    public void run() {
+                        RestClient restClient = new RestClient(getResources().getString(R.string.rest_scoreboard));
+                        try {
+                            restClient.Execute(RestClient.RequestMethod.GET);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        String response = restClient.getResponse();
+                        Gson gson = new Gson();
+                        users = gson.fromJson(response, new TypeToken<List<User>>() {
+                        }.getType());
+                    }
+                });
+                t.start();
+                try {
+                    t.join();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    private void loadStations() {
+// SQLite data inladen
+        // bikestations inladen
+        MySQLiteHelper sqlite = new MySQLiteHelper(getApplicationContext());
+
+        // aantal stations opvragen in geheugen
+        final int aantal = sqlite.getAllBikeStations().size();
+
+        if(Tools.isInternetAvailable(getApplicationContext())) {
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    MySQLiteHelper sqlite = new MySQLiteHelper(getApplicationContext());
+                    InputStream source = Tools.retrieveStream(getResources().getString(R.string.rest_stations));
+                    Gson gson = new Gson();
+                    Reader reader = new InputStreamReader(source);
+                    TabsActivity.bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
+
+                    for (BikeStation station : TabsActivity.bikestations) {
+                        if(aantal == 0) sqlite.addBikeStation(station);
+                        else{ // update with realtime info
+                            BikeStation s = sqlite.getBikeStation(station.getId());
+                            s.setBonuspoints(station.getBonuspoints());
+                            s.setAvailable_bike_stands(station.getAvailable_bike_stands());
+                            s.setAvailable_bikes(station.getAvailable_bikes());
+                            sqlite.updateBikeStation(s);
+                        }
+                    }
+                }
+            });
+            t.start();
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+            // geheugen
+            for (BikeStation station : sqlite.getAllBikeStations()){
+                station.setBonuspoints(0);
+                station.setDistance(0);
+                sqlite.updateBikeStation(station);
+            }
+            TabsActivity.bikestations = sqlite.getAllBikeStations();
+        }
     }
 
     @Override

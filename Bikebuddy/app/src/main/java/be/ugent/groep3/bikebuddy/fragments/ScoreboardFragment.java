@@ -25,7 +25,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
+import be.ugent.groep3.bikebuddy.activities.LoginActivity;
 import be.ugent.groep3.bikebuddy.activities.TabsActivity;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.beans.User;
@@ -35,7 +37,6 @@ import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 public class ScoreboardFragment extends Fragment {
 
-    private List<User> users;
     private ListView listView;
 
 
@@ -56,29 +57,13 @@ public class ScoreboardFragment extends Fragment {
         // online
         if(Tools.isInternetAvailable(this.getActivity().getApplicationContext()) ) {
             view = inflater.inflate(R.layout.fragment_scoreboard_online, container, false);
-            if(Tools.isInternetAvailable(this.getActivity().getApplicationContext())) {
-                Thread t = new Thread(new Runnable() {
-                    public void run() {
-                        RestClient restClient = new RestClient(getResources().getString(R.string.rest_scoreboard));
-                        try {
-                            restClient.Execute(RestClient.RequestMethod.GET);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        String response = restClient.getResponse();
-                    }
-                });
-                t.start();
-                try {
-                    t.join();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
             listView = (ListView)  view.findViewById(R.id.scoreboard_list);
-            sortByBonuspoints(users);
-            setRank(users);
+            sortByBonuspoints(TabsActivity.users);
+            setRank(TabsActivity.users);
             updateGUIList();
+
+            View header = (View) inflater.inflate(R.layout.user_list_header_row, null);
+            listView.addHeaderView(header);
         }
         // offline
         else {
@@ -108,7 +93,7 @@ public class ScoreboardFragment extends Fragment {
     }
 
     private void updateGUIList(){
-        listView.setAdapter(new CustomListAdapter(getActivity(), users, this));
+        listView.setAdapter(new CustomListAdapter(getActivity(), TabsActivity.users, this));
     }
 
     private class CustomListAdapter extends BaseAdapter {
@@ -150,11 +135,12 @@ public class ScoreboardFragment extends Fragment {
             // User in component steken:
             User user = users.get(position);
             TextView ranking = (TextView) convertView.findViewById(R.id.ranking);
-            ranking.setText(position);
+            ranking.setText(Integer.toString(user.getRanking()));
             TextView user_name = (TextView) convertView.findViewById(R.id.user_name);
             user_name.setText(user.getName());
             TextView bonuspoints = (TextView) convertView.findViewById(R.id.user_bonuspoints);
-            bonuspoints.setText(user.getBonuspoints());
+            bonuspoints.setText(Integer.toString(user.getBonuspoints()));
+            convertView.setTag(convertView.getId(),user);
 
             return convertView;
         }

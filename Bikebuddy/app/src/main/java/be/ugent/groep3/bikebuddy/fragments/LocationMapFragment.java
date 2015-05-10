@@ -126,6 +126,7 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
                         .title(station.getName()));
                 if(station.getBonuspoints()>0) m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             }
+            previous = TabsActivity.bikestations.size();
         }
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override

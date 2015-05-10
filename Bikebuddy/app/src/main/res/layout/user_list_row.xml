@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="8dp">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center_vertical"
-        android:scaleType="fitXY"
-        android:src="@drawable/star_icon"/>
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_weight="0.7"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/location_list_row_selector"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:background="@drawable/user_list_row_selector"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:weightSum="1">
 
         <!-- Ranking -->
         <TextView
             android:id="@+id/ranking"
-            android:layout_width="wrap_content"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray" />
+            android:ems="10"
+            android:textColor="@color/black"
+            android:layout_weight="1.63" />
 
         <!-- Username -->
         <TextView
             android:id="@+id/user_name"
-            android:layout_width="wrap_content"
+            android:layout_width="192dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
+            android:ems="10"
             android:textStyle="bold" />
 
         <!-- Bonuspoints -->
         <TextView
             android:id="@+id/user_bonuspoints"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray" />
-
-    </LinearLayout>
+            android:ems="10"
+            android:textColor="@color/black" />
+        </LinearLayout>
 
 </LinearLayout>

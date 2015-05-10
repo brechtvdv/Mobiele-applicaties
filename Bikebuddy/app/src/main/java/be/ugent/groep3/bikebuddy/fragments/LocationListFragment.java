@@ -69,51 +69,7 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        // SQLite data inladen
-        // bikestations inladen
-        MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
-
-        // aantal stations opvragen in geheugen
-        final int aantal = sqlite.getAllBikeStations().size();
-
-        if(Tools.isInternetAvailable(this.getActivity().getApplicationContext())) {
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
-                    InputStream source = Tools.retrieveStream(getResources().getString(R.string.rest_stations));
-                    Gson gson = new Gson();
-                    Reader reader = new InputStreamReader(source);
-                    TabsActivity.bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
-
-                    for (BikeStation station : TabsActivity.bikestations) {
-                        if(aantal == 0) sqlite.addBikeStation(station);
-                        else{ // update with realtime info
-                            BikeStation s = sqlite.getBikeStation(station.getId());
-                            s.setBonuspoints(station.getBonuspoints());
-                            s.setAvailable_bike_stands(station.getAvailable_bike_stands());
-                            s.setAvailable_bikes(station.getAvailable_bikes());
-                            sqlite.updateBikeStation(s);
-                        }
-                    }
-                }
-            });
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-            sortByBonuspoints();
-        } else {
-            // geheugen
-            for (BikeStation station : sqlite.getAllBikeStations()){
-                station.setBonuspoints(0);
-                station.setDistance(0);
-                sqlite.updateBikeStation(station);
-            }
-            TabsActivity.bikestations = sqlite.getAllBikeStations();
-        }
+        sortByBonuspoints();
 
         updateGUIList();
 
