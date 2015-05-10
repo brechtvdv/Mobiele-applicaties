@@ -21,6 +21,11 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="btn_search">Search</string>
 
+    <!-- User fragment -->
+    <string name="user_fragment_score">Score</string>
+    <string name="user_fragment_rank">Rank</string>
+    <string name="user_fragment_points">Points</string>
+
     <!-- Detail activity -->
     <string name="qr_text">When you return your bike, scan the QR code on the display to receive bonus points</string>
 
