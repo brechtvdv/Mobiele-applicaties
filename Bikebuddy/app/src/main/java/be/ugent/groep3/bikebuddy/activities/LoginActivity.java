@@ -341,6 +341,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
 
             if (success) {
                 finish();
+                DataSingleton.getData().setEmail(mEmail);
                 Intent intent = new Intent(ctx, TabsActivity.class);
                 startActivity(intent);
 
