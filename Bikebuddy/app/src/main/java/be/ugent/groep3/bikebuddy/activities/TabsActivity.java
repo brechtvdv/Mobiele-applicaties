@@ -77,12 +77,15 @@ public class TabsActivity extends FragmentActivity {
         // Laat het toetsenbord niet zien:
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
-        loadStations();
-
-        loadUsers();
+        // load on boot, not when returning from DetailActivity
+        if(getCallingActivity() == null){
+            loadStations();
+            loadUsers();
+        }
     }
 
-    private void loadUsers() {
+
+    public void loadUsers() {
         // online
         if(Tools.isInternetAvailable(getApplicationContext()) ) {
             if (Tools.isInternetAvailable(getApplicationContext())) {
@@ -110,7 +113,7 @@ public class TabsActivity extends FragmentActivity {
         }
     }
 
-    private void loadStations() {
+    public void loadStations() {
 // SQLite data inladen
         // bikestations inladen
         MySQLiteHelper sqlite = new MySQLiteHelper(getApplicationContext());

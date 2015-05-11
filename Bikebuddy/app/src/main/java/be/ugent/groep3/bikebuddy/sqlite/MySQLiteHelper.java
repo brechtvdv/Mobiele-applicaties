@@ -117,36 +117,44 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 1. get reference to readable DB
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        BikeStation station = new BikeStation();
 
         // 2. build query
-        Cursor cursor =
-                db.query(TABLE_STATIONS, // a. table
-                        COLUMNS, // b. column names
-                        " id = ?", // c. selections
-                        new String[] { String.valueOf(id) }, // d. selections args
-                        null, // e. group by
-                        null, // f. having
-                        null, // g. order by
-                        null); // h. limit
+        try {
+            cursor =
+                    db.query(TABLE_STATIONS, // a. table
+                            COLUMNS, // b. column names
+                            " id = ?", // c. selections
+                            new String[]{String.valueOf(id)}, // d. selections args
+                            null, // e. group by
+                            null, // f. having
+                            null, // g. order by
+                            null); // h. limit
 
-        // 3. if we got results get the first one
-        if (cursor != null)
-            cursor.moveToFirst();
+            // 3. if we got results get the first one
+            if (cursor != null)
+                cursor.moveToFirst();
 
-        // 4. build station object
-        BikeStation station = new BikeStation();
-        station.setId(cursor.getInt(0));
-        station.setNumber(cursor.getInt(1));
-        station.setName(cursor.getString(2));
-        station.setAddress(cursor.getString(3));
-        station.setLongitude(cursor.getFloat(4));
-        station.setLatitude(cursor.getFloat(5));
-        station.setStatus(cursor.getString(6));
-        station.setBike_stands(cursor.getInt(7));
-        station.setAvailable_bike_stands(cursor.getInt(8));
-        station.setAvailable_bikes(cursor.getInt(9));
-        station.setBonuspoints(cursor.getInt(10));
-        station.setDistance(cursor.getInt(11));
+            // 4. build station object
+            //BikeStation station = new BikeStation();
+            station.setId(cursor.getInt(0));
+            station.setNumber(cursor.getInt(1));
+            station.setName(cursor.getString(2));
+            station.setAddress(cursor.getString(3));
+            station.setLongitude(cursor.getFloat(4));
+            station.setLatitude(cursor.getFloat(5));
+            station.setStatus(cursor.getString(6));
+            station.setBike_stands(cursor.getInt(7));
+            station.setAvailable_bike_stands(cursor.getInt(8));
+            station.setAvailable_bikes(cursor.getInt(9));
+            station.setBonuspoints(cursor.getInt(10));
+            station.setDistance(cursor.getInt(11));
+        } finally {
+            // this gets called even if there is an exception somewhere above
+            if(cursor != null)
+                cursor.close();
+        }
 
         //log
         Log.d("getStation(" + id + ")", station.toString());
@@ -163,30 +171,38 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
         // 2. get reference to writable DB
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = null;
 
-        // 3. go over each row, build station and add it to list
-        BikeStation station = null;
-        if (cursor.moveToFirst()) {
-            do {
-                station = new BikeStation();
-                station.setId(Integer.parseInt(cursor.getString(0)));
-                station.setNumber(Integer.parseInt(cursor.getString(1)));
-                station.setName(cursor.getString(2).toString());
-                station.setAddress(cursor.getString(3).toString());
-                station.setLongitude(Float.parseFloat(cursor.getString(4)));
-                station.setLatitude(Float.parseFloat(cursor.getString(5)));
-                station.setStatus(cursor.getString(6).toString());
-                station.setBike_stands(Integer.parseInt(cursor.getString(7)));
-                station.setAvailable_bike_stands(Integer.parseInt(cursor.getString(8)));
-                station.setAvailable_bikes(Integer.parseInt(cursor.getString(9)));
-                station.setBonuspoints(Integer.parseInt(cursor.getString(10)));
-                station.setDistance(Integer.parseInt(cursor.getString(11)));
+        try {
+            cursor = db.rawQuery(query, null);
+
+            // 3. go over each row, build station and add it to list
+            BikeStation station = null;
+            if (cursor.moveToFirst()) {
+                do {
+                    station = new BikeStation();
+                    station.setId(Integer.parseInt(cursor.getString(0)));
+                    station.setNumber(Integer.parseInt(cursor.getString(1)));
+                    station.setName(cursor.getString(2).toString());
+                    station.setAddress(cursor.getString(3).toString());
+                    station.setLongitude(Float.parseFloat(cursor.getString(4)));
+                    station.setLatitude(Float.parseFloat(cursor.getString(5)));
+                    station.setStatus(cursor.getString(6).toString());
+                    station.setBike_stands(Integer.parseInt(cursor.getString(7)));
+                    station.setAvailable_bike_stands(Integer.parseInt(cursor.getString(8)));
+                    station.setAvailable_bikes(Integer.parseInt(cursor.getString(9)));
+                    station.setBonuspoints(Integer.parseInt(cursor.getString(10)));
+                    station.setDistance(Integer.parseInt(cursor.getString(11)));
 
 
-                // Add book to books
-                stations.add(station);
-            } while (cursor.moveToNext());
+                    // Add book to books
+                    stations.add(station);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            // this gets called even if there is an exception somewhere above
+            if(cursor != null)
+                cursor.close();
         }
 
         Log.d("getAllStations()", stations.toString());
