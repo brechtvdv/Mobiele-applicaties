@@ -23,7 +23,7 @@ Route::controllers([
 Route::get('stations', 'StationController@getStations');
 
 Route::get('profile', [
-    'middleware' => 'guest',
+    'middleware' => 'auth',
     'uses' => 'UserController@showProfile'
 ]);
 
