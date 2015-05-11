@@ -35,5 +35,6 @@
     <string name="rest_stations">http://n091-vm26-10.wall2.ilabt.iminds.be/stations</string>
     <string name="rest_scoreboard">http://n091-vm26-10.wall2.ilabt.iminds.be/scoreboard</string>
     <string name="available_bikes">Available bikes:</string>
+    <string name="offline">Feature not available offline</string>
 
 </resources>

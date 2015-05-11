@@ -65,6 +65,7 @@
                 android:paddingTop="5dp">
                 <!-- Bonus points -->
                 <ImageView
+                    android:id="@+id/detail_star"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:paddingBottom="5dp"
@@ -89,6 +90,7 @@
             android:paddingTop="5dp">
                 <!-- Available bikes -->
                 <TextView
+                    android:id="@+id/detail_available_bikes_text"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp"
                     android:text="@string/available_bikes"
@@ -108,6 +110,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/detail_qr_text"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="30dp"

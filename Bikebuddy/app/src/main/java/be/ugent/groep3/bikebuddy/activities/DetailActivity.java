@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,6 +33,7 @@ import java.util.List;
 import be.ugent.groep3.bikebuddy.CustomViews.ClearableAutoCompleteTextView;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
+import be.ugent.groep3.bikebuddy.logica.Tools;
 
 public class DetailActivity extends Activity implements View.OnClickListener, OnMapReadyCallback{
 
@@ -75,9 +77,22 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
 
         tvName.setText(bikeStation.getName());
         tvAddress.setText(bikeStation.getAddress());
-        tvBonus.setText(Integer.toString(bikeStation.getBonuspoints()));
-        tvAvailableBikes.setText(Integer.toString(bikeStation.getAvailable_bikes()) + "/" + Integer.toString(bikeStation.getBike_stands()));
-        btnScan.setOnClickListener(this);
+
+        // online
+        if(Tools.isInternetAvailable(getApplicationContext())) {
+            tvBonus.setText(Integer.toString(bikeStation.getBonuspoints()));
+            tvAvailableBikes.setText(Integer.toString(bikeStation.getAvailable_bikes()) + "/" + Integer.toString(bikeStation.getBike_stands()));
+            btnScan.setOnClickListener(this);
+        } else {
+            tvBonus.setVisibility(View.GONE);
+            tvAvailableBikes.setVisibility(View.GONE);
+            btnScan.setVisibility(View.GONE);
+
+            findViewById(R.id.detail_star).setVisibility(View.GONE);
+            findViewById(R.id.detail_available_bikes_text).setVisibility(View.GONE);
+            findViewById(R.id.detail_available_bikes_text).setVisibility(View.GONE);
+            findViewById(R.id.detail_qr_text).setVisibility(View.GONE);
+        }
 
         // KAART INLADEN:
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.detail_map);
