@@ -6,10 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -46,12 +48,13 @@ import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class LocationListFragment extends Fragment implements View.OnClickListener {
+public class LocationListFragment extends Fragment implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private final int RESULT_OK = 1;
     private ListView listView;
     Double[] place;
     private CustomListAdapter adapter;
+    private SwipeRefreshLayout swipeLayout;
 
     public LocationListFragment() {
     }
@@ -69,51 +72,19 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             }
         });
 
-        // SQLite data inladen
-        // bikestations inladen
-        MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
+        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
 
-        // aantal stations opvragen in geheugen
-        final int aantal = sqlite.getAllBikeStations().size();
-
-        if(Tools.isInternetAvailable(this.getActivity().getApplicationContext())) {
-            Thread t = new Thread(new Runnable() {
-                public void run() {
-                    MySQLiteHelper sqlite = new MySQLiteHelper(getActivity());
-                    InputStream source = Tools.retrieveStream(getResources().getString(R.string.rest_stations));
-                    Gson gson = new Gson();
-                    Reader reader = new InputStreamReader(source);
-                    TabsActivity.bikestations = gson.fromJson(reader, new TypeToken<List<BikeStation>>() {}.getType());
-
-                    for (BikeStation station : TabsActivity.bikestations) {
-                        if(aantal == 0) sqlite.addBikeStation(station);
-                        else{ // update with realtime info
-                            BikeStation s = sqlite.getBikeStation(station.getId());
-                            s.setBonuspoints(station.getBonuspoints());
-                            s.setAvailable_bike_stands(station.getAvailable_bike_stands());
-                            s.setAvailable_bikes(station.getAvailable_bikes());
-                            sqlite.updateBikeStation(s);
-                        }
-                    }
-                }
-            });
-            t.start();
-            try {
-                t.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        } else {
-            // geheugen
-            for (BikeStation station : sqlite.getAllBikeStations()){
-                station.setBonuspoints(0);
-                station.setDistance(0);
-                sqlite.updateBikeStation(station);
-            }
-            TabsActivity.bikestations = sqlite.getAllBikeStations();
-        }
+        sortByBonuspoints();
 
         updateGUIList();
+
+        //hide keyboard :
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         return view;
     }
@@ -149,6 +120,9 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             sortByDistance();
         else sortByBonuspoints();
 
+        //hide keyboard :
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
     }
 
     private void sortByDistance(){
@@ -179,6 +153,17 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
 
     private void updateGUIList(){
         listView.setAdapter(new CustomListAdapter(getActivity(),this));
+    }
+
+    @Override
+    public void onRefresh() {
+        TabsActivity act = (TabsActivity) this.getActivity();
+        swipeLayout.setRefreshing(true);
+        act.loadStations();
+        act.loadUsers();
+        sortByBonuspoints();
+        updateGUIList();
+        swipeLayout.setRefreshing(false);
     }
 
     private class CustomListAdapter extends BaseAdapter{

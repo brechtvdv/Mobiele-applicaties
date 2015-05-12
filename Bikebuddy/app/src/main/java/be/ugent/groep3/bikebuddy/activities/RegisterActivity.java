@@ -28,6 +28,7 @@ import android.widget.EditText;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.logica.RestClient;
 
@@ -87,6 +88,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
     }
 
     private void switchToLogin() {
+        Log.i("test","switchToLogin()");
         Intent intent;
         intent = NavUtils.getParentActivityIntent(this);
         NavUtils.navigateUpTo(this, intent);
@@ -280,7 +282,7 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+            // attempt authentication against a network service.
             RestClient restClient = new RestClient(getResources().getString(R.string.rest_register));
 
             try {
@@ -299,16 +301,18 @@ public class RegisterActivity extends Activity implements LoaderCallbacks<Cursor
             }
 
             String response = restClient.getResponse();
-            Log.i("test",response);
+            //Log.i("test",response);
             return response.contains("You are logged in!");
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
             mAuthTask = null;
-            showProgress(false);
+            showProgress(true);
 
             if (success) {
+                DataSingleton.getData().setName(mName);
+                DataSingleton.getData().setEmail(mEmail);
                 finish();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

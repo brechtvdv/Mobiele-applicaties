@@ -22,11 +22,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.activities.TabsActivity;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
+import be.ugent.groep3.bikebuddy.logica.MarkerInfoWindowAdapter;
+import be.ugent.groep3.bikebuddy.logica.Tools;
 import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 
@@ -37,10 +40,13 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     private GoogleMap googleMap;
     private int previous = 0; // locations
     private static View view;
+    private LayoutInflater inflater;
+    public static HashMap<Marker, BikeStation> mMarkersHashMap;
 
     public LocationMapFragment() {
         // Required empty public constructor
         positions = new ArrayList<>();
+        mMarkersHashMap = new HashMap<Marker, BikeStation>();
     }
 
     @Override
@@ -52,6 +58,7 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.inflater = inflater;
         if (view != null) {
             ViewGroup parent = (ViewGroup) view.getParent();
             if (parent != null)
@@ -121,11 +128,20 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
                 LatLng ll = new LatLng(station.getLatitude(), station.getLongitude());
                 Log.d("latlng", ll.latitude + "," + ll.longitude);
                 positions.add(ll);
-                Marker m = googleMap.addMarker(new MarkerOptions()
-                        .position(ll)
-                        .title(station.getName()));
+                Marker m;
+                if(Tools.isInternetAvailable(getActivity().getApplicationContext())){
+                    m = googleMap.addMarker(new MarkerOptions()
+                            .position(ll));
+                    googleMap.setInfoWindowAdapter(new MarkerInfoWindowAdapter(inflater));
+                    mMarkersHashMap.put(m, station);
+                } else {
+                    m = googleMap.addMarker(new MarkerOptions()
+                            .position(ll)
+                            .title(station.getName()));
+                }
                 if(station.getBonuspoints()>0) m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             }
+            previous = TabsActivity.bikestations.size();
         }
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override

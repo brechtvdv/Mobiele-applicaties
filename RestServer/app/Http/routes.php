@@ -23,11 +23,9 @@ Route::controllers([
 Route::get('stations', 'StationController@getStations');
 
 Route::get('profile', [
-    'middleware' => 'auth',
     'uses' => 'UserController@showProfile'
 ]);
 
 Route::get('scoreboard', [
-    'middleware' => 'auth',
     'uses' => 'UserController@showScoreboard'
 ]);
