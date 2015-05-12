@@ -27,6 +27,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,11 +112,13 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         super.onResume();
         Log.i("test", "checking data singleton");
         if(DataSingleton.getData().getEmail() != null && DataSingleton.getData().getName() != null){
-            Log.i("test", "attempt login");
+            /*Log.i("test", "attempt login");
             finish();
             Intent intent = new Intent(this, TabsActivity.class);
             startActivity(intent);
-
+            */
+            Toast.makeText(getApplicationContext(), "Your registration was succesfull.",
+                    Toast.LENGTH_LONG).show();
         }
     }
 
