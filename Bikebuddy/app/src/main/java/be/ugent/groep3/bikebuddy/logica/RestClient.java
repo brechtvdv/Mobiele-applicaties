@@ -1,5 +1,8 @@
 package be.ugent.groep3.bikebuddy.logica;
 
+import android.util.Log;
+
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -38,11 +41,21 @@ public class RestClient {
 
     private int responseCode;
     private String message;
+    private String cookie;
 
     private String response;
 
     public String getResponse() {
         return response;
+    }
+
+    public String getCookie() { return cookie; }
+
+    public void setCookie( String cookie ) {
+        if ( !cookie.equals("") ) {
+            this.cookie = cookie;
+            AddParam("Cookie", cookie);
+        }
     }
 
     public String getErrorMessage() {
@@ -56,6 +69,7 @@ public class RestClient {
     public RestClient(String url)
     {
         this.url = url;
+        cookie = "";
         params = new ArrayList<NameValuePair>();
         headers = new ArrayList<NameValuePair>();
     }
@@ -134,6 +148,12 @@ public class RestClient {
             httpResponse = client.execute(request);
             responseCode = httpResponse.getStatusLine().getStatusCode();
             message = httpResponse.getStatusLine().getReasonPhrase();
+
+            Header cookieHeader = httpResponse.getHeaders("Set-Cookie")[0];
+            if ( !cookieHeader.getValue().equals("") ) {
+                cookie = cookieHeader.getValue();
+                Log.i("Cookie", cookieHeader.getValue());
+            }
 
             HttpEntity entity = httpResponse.getEntity();
 
