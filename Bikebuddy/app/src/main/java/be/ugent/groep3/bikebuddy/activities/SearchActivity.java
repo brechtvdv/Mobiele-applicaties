@@ -71,6 +71,8 @@ public class SearchActivity extends FragmentActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // to refresh locationlist Fragment
+        TabsActivity.customsearch = true;
 
         // Set up the Google API Client if it has not been initialised yet.
         if (mGoogleApiClient == null) {

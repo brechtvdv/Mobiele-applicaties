@@ -52,6 +52,8 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        // to refresh locationlist Fragment
+        TabsActivity.customsearch = true;
 
         // STATION OPHALEN:
         Intent intent = getIntent();

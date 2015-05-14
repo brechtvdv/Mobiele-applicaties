@@ -73,35 +73,21 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
 
         MapFragment mapFragment = (MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
         return view;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        UIUpdate();
     }
 
     @Override
     public void setUserVisibleHint(boolean visible) {
         super.setUserVisibleHint(visible);
-        if (visible && isResumed()) {
+        if (visible && isResumed() && TabsActivity.visibleLoaded) {
             UIUpdate();
         }
-    }
-
-    @Override
-    public void onDestroyView() {
-
-//        android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-//        Fragment fragment = (fm.findFragmentById(R.id.map));
-//
-//        if (fragment.isResumed()) {
-//            FragmentTransaction ft = fm.beginTransaction();
-//            //ft.remove(fragment);
-//            ft.commit();
-//        }
-    super.onDestroyView();
     }
 
     private LatLngBounds calculateBoundingBox(){
@@ -120,16 +106,16 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
                 new LatLng(maxLat + EDGE, maxLong + EDGE));
     }
 
-    private void UIUpdate(){
-        if(previous != TabsActivity.bikestations.size()) {
+    public void UIUpdate(){
+        if (previous != TabsActivity.mapStations.size()) {
             positions.clear();
             googleMap.clear();
-            for (BikeStation station : TabsActivity.bikestations) {
+            for (BikeStation station : TabsActivity.mapStations) {
                 LatLng ll = new LatLng(station.getLatitude(), station.getLongitude());
                 Log.d("latlng", ll.latitude + "," + ll.longitude);
                 positions.add(ll);
                 Marker m;
-                if(Tools.isInternetAvailable(getActivity().getApplicationContext())){
+                if (Tools.isInternetAvailable(getActivity().getApplicationContext())) {
                     m = googleMap.addMarker(new MarkerOptions()
                             .position(ll));
                     googleMap.setInfoWindowAdapter(new MarkerInfoWindowAdapter(inflater));
@@ -139,9 +125,10 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
                             .position(ll)
                             .title(station.getName()));
                 }
-                if(station.getBonuspoints()>0) m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                if (station.getBonuspoints() > 0)
+                    m.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
             }
-            previous = TabsActivity.bikestations.size();
+            previous = TabsActivity.mapStations.size();
         }
         googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override

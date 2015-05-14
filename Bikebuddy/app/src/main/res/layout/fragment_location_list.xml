@@ -34,4 +34,12 @@
         fab:fab_colorNormal="@color/fab_accent"
         fab:fab_colorPressed="@color/fab_accent_pressed"
         fab:fab_colorRipple="@color/fab_ripple"/>
+
+    <ProgressBar
+            android:id="@+id/pb_loading_rest"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"/>
 </FrameLayout>
