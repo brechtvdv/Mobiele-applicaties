@@ -117,7 +117,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             Intent intent = new Intent(this, TabsActivity.class);
             startActivity(intent);
             */
-            Toast.makeText(getApplicationContext(), "Your registration was succesfull.",
+            Toast.makeText(getApplicationContext(), "Registration successful.",
                     Toast.LENGTH_LONG).show();
         }
     }
