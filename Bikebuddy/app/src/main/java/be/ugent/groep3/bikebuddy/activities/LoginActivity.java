@@ -117,7 +117,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             Intent intent = new Intent(this, TabsActivity.class);
             startActivity(intent);
             */
-            Toast.makeText(getApplicationContext(), "Your registration was succesfull.",
+            Toast.makeText(getApplicationContext(), "Registration successful.",
                     Toast.LENGTH_LONG).show();
         }
     }
@@ -334,7 +334,12 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
             String response = restClient.getResponse();
             Log.i("test",response);
 
-            return response.contains("You are logged in!");
+            if ( !response.contains("You are logged in!") ) {
+                return false;
+            }
+            DataSingleton.getData().setCookie(restClient.getCookie());
+            return true;
+
         }
 
         @Override

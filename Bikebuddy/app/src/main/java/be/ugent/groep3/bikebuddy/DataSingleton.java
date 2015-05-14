@@ -9,12 +9,22 @@ public class DataSingleton {
     private static DataSingleton data;
     private String name;
     private String email;
+    private String cookie;
+
     static{
         data = new DataSingleton();
     }
 
     private DataSingleton(){
 
+    }
+
+    public String getCookie(){
+        return cookie;
+    }
+
+    public void setCookie( String cookie ){
+        this.cookie = cookie;
     }
 
     public String getName() {
