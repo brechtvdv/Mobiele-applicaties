@@ -22,9 +22,7 @@ Route::controllers([
 
 Route::get('stations', 'StationController@getStations');
 
-Route::get('profile', [
-    'uses' => 'UserController@showProfile'
-]);
+Route::get('profile/{email}', 'UserController@showProfile');
 
 Route::get('scoreboard', [
     'uses' => 'UserController@showScoreboard'

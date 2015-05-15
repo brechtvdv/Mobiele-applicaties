@@ -12,18 +12,9 @@ class UserController extends Controller {
     {
     }
 
-    public function showProfile()
+    public function showProfile($email)
     {
-    	$attributes = Auth::user()['attributes'];
-    	// var_dump($attributes);
-
-    	$data = json_encode(array('name' => $attributes['name'], 
-    								'email' => $attributes['email'],
-    								'bonuspoints' => $attributes['bonuspoints'],
-    								'bonusdays' => $attributes['bonusdays'],
-    								'visible' => $attributes['visible']), JSON_FORCE_OBJECT);
-
-    	return $data;
+        return User::where('email','=',$email)->get()[0];
     }
 
     public function showScoreboard(){
