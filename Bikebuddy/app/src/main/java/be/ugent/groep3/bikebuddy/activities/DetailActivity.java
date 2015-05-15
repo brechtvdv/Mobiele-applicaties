@@ -4,18 +4,14 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.media.Image;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,9 +26,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-import be.ugent.groep3.bikebuddy.CustomViews.ClearableAutoCompleteTextView;
+import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
+import be.ugent.groep3.bikebuddy.logica.RestClient;
 import be.ugent.groep3.bikebuddy.logica.Tools;
 
 public class DetailActivity extends Activity implements View.OnClickListener, OnMapReadyCallback{
@@ -152,10 +149,26 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
                 //get the extras that are returned from the intent
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
-                Toast toast = Toast.makeText(this, "Content:" + contents + " Format:" + format, Toast.LENGTH_LONG);
-                toast.show();
+                //Toast toast = Toast.makeText(this, "Content:" + contents + " Format:" + format, Toast.LENGTH_LONG);
+                //toast.show();
             }
         }
+    }
+
+    private void sendCode(final String contents){
+        Thread t = new Thread(new Runnable() {
+            public void run() {
+                RestClient restClient = new RestClient(getResources().getString(R.string.rest_scan));
+                try {
+                    restClient.AddParam("email", DataSingleton.getData().getEmail());
+                    restClient.AddParam("code", contents);
+                    restClient.Execute(RestClient.RequestMethod.POST);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        t.start();
     }
 
     @Override

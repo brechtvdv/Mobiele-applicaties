@@ -17,13 +17,18 @@ Go to your project folder and run:
 
 Routes:
 
-bikebuddy.com/auth/register
-bikebuddy.com/auth/login
+http://n091-vm26-10.wall2.ilabt.iminds.be/auth/register
+http://n091-vm26-10.wall2.ilabt.iminds.be/auth/login
 
-bikebuddy.com/stations 
+http://n091-vm26-10.wall2.ilabt.iminds.be/stations 
 
-bikebuddy.com/profile (logged in required)
-bikebuddy.com/scoreboard (logged in required)
+http://n091-vm26-10.wall2.ilabt.iminds.be/profile/{emailadress} 
+http://n091-vm26-10.wall2.ilabt.iminds.be/scoreboard 
+http://n091-vm26-10.wall2.ilabt.iminds.be/scan -> POST-parameters: 'email', 'code'
+
+# Scanner
+
+To scan, install <a href="https://play.google.com/store/apps/details?id=com.google.zxing.client.android&hl=nl">Barcode Scanner</a>
 
 
 

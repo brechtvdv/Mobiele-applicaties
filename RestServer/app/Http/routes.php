@@ -27,3 +27,5 @@ Route::get('profile/{email}', 'UserController@showProfile');
 Route::get('scoreboard', [
     'uses' => 'UserController@showScoreboard'
 ]);
+
+Route::post('scan', 'UserController@scan');
