@@ -149,6 +149,7 @@ public class DetailActivity extends Activity implements View.OnClickListener, On
                 //get the extras that are returned from the intent
                 String contents = intent.getStringExtra("SCAN_RESULT");
                 String format = intent.getStringExtra("SCAN_RESULT_FORMAT");
+                sendCode(contents);
                 //Toast toast = Toast.makeText(this, "Content:" + contents + " Format:" + format, Toast.LENGTH_LONG);
                 //toast.show();
             }
