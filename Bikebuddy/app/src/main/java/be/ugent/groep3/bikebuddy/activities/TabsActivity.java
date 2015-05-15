@@ -1,20 +1,14 @@
 package be.ugent.groep3.bikebuddy.activities;
 
 import android.app.ActionBar;
-import android.content.Context;
-import android.location.Location;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.ProgressBar;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.google.gson.Gson;
@@ -76,7 +70,7 @@ public class TabsActivity extends FragmentActivity {
                     if(verschil < loclistfrag.LOAD) {
                         for (int i = (loclistfrag.PAGE * loclistfrag.LOAD); i < verschil; i++)
                             myListItems.add(TabsActivity.bikestations.get(i));
-                    } else{
+                    } else if(TabsActivity.bikestations.size()>0){
                         for (int i = (loclistfrag.PAGE * loclistfrag.LOAD); i < (loclistfrag.PAGE * loclistfrag.LOAD) + loclistfrag.LOAD; i++)
                             myListItems.add(TabsActivity.bikestations.get(i));
                     }
@@ -160,10 +154,11 @@ public class TabsActivity extends FragmentActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                               ProgressBar pb = (ProgressBar) findViewById(R.id.pb_loading_rest);
-                                ProgressBar pbMap = (ProgressBar) findViewById(R.id.pb_loading_rest2);
-                                pb.setVisibility(ProgressBar.VISIBLE);
-                                pbMap.setVisibility(ProgressBar.VISIBLE);
+                                loclistfrag.addPatience();
+                               //ProgressBar pb = (ProgressBar) findViewById(R.id.pb_loading_rest3);
+                                //ProgressBar pbMap = (ProgressBar) findViewById(R.id.pb_loading_rest2);
+                                //pb.setVisibility(ProgressBar.VISIBLE);
+                                //pbMap.setVisibility(ProgressBar.VISIBLE);
                             }
                         });
 
@@ -206,24 +201,17 @@ public class TabsActivity extends FragmentActivity {
                     Thread threadContent = new Thread(null, loadVisibleStations);
                     threadContent.start();
 
-                    if(loclistfrag.listView.getFooterViewsCount()==0){
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                loclistfrag.addFooter();
-                            }
-                        });
-                    }
-
                     mapStations = bikestations;
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            ProgressBar pb = (ProgressBar) findViewById(R.id.pb_loading_rest);
-                            ProgressBar pbMap = (ProgressBar) findViewById(R.id.pb_loading_rest2);
-                            pb.setVisibility(ProgressBar.GONE);
-                            pbMap.setVisibility(ProgressBar.GONE);
+                            loclistfrag.addFooter();
+                            loclistfrag.deletePatience();
+                            //ProgressBar pb = (ProgressBar) findViewById(R.id.pb_loading_rest3);
+                            //ProgressBar pbMap = (ProgressBar) findViewById(R.id.pb_loading_rest2);
+                            //pb.setVisibility(ProgressBar.GONE);
+                            //pbMap.setVisibility(ProgressBar.GONE);
                         }
                     });
                 }

@@ -36,7 +36,7 @@
         fab:fab_colorRipple="@color/fab_ripple"/>
 
     <ProgressBar
-            android:id="@+id/pb_loading_rest"
+            android:id="@+id/pb_loading_rest3"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

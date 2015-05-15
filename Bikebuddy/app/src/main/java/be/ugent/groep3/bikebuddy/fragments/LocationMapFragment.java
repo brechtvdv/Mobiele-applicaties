@@ -1,9 +1,7 @@
 package be.ugent.groep3.bikebuddy.fragments;
 
-import android.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
@@ -30,7 +27,6 @@ import be.ugent.groep3.bikebuddy.activities.TabsActivity;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.logica.MarkerInfoWindowAdapter;
 import be.ugent.groep3.bikebuddy.logica.Tools;
-import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 
 public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
@@ -85,7 +81,7 @@ public class LocationMapFragment extends Fragment implements OnMapReadyCallback{
     @Override
     public void setUserVisibleHint(boolean visible) {
         super.setUserVisibleHint(visible);
-        if (visible && isResumed() && TabsActivity.visibleLoaded) {
+        if (visible && isResumed() && TabsActivity.visibleLoaded && TabsActivity.mapStations.size()>0) {
             UIUpdate();
         }
     }

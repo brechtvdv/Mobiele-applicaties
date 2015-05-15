@@ -39,5 +39,6 @@
     <string name="available_bikes">Available bikes:</string>
     <string name="offline">Feature not available offline</string>
     <string name="loading_bikestations">Click to load more bikestations...</string>
+    <string name="loading_have_patience">Loading...</string>
 
 </resources>

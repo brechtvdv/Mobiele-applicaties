@@ -1,40 +1,22 @@
 package be.ugent.groep3.bikebuddy.fragments;
 
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.melnykov.fab.FloatingActionButton;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -59,6 +41,8 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     Double[] place;
     public static CustomListAdapter adapter;
     private SwipeRefreshLayout swipeLayout;
+    private View footerView;
+    private View patienceView;
 
     public int LOAD = 5; // amount of stations to show
     public int PAGE;
@@ -71,13 +55,16 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_location_list, container, false);
         listView = (ListView) view.findViewById(R.id.list);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doSearch(v);
-            }
-        });
+
+        if(Tools.isInternetAvailable(getActivity().getApplicationContext())) {
+            FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    doSearch(v);
+                }
+            });
+        }
 
         swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
@@ -100,9 +87,6 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
         }
         updateGUIList();
 
-        if(listView.getFooterViewsCount()==0)
-            addFooter();
-
         //hide keyboard :
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
@@ -110,20 +94,30 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     }
 
     public void addFooter(){
-        View footerView = ((LayoutInflater)this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_bikelocations, null, false);
-        footerView.setBackgroundColor(getResources().getColor(R.color.sa));
-        listView.addFooterView(footerView);
-        footerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loadNext();
-            }
-        });
+        if(listView.getFooterViewsCount()==0) {
+            footerView = ((LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_bikelocations, null, false);
+            footerView.setBackgroundColor(getResources().getColor(R.color.sa));
+            listView.addFooterView(footerView);
+            footerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadNext();
+                }
+            });
+        }
     }
 
     public void deleteFooter(){
-        View footerView = ((LayoutInflater)this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_bikelocations, null, false);
         listView.removeFooterView(footerView);
+    }
+
+    public void addPatience(){
+        patienceView = ((LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_have_patience, null, false);
+        listView.addHeaderView(patienceView);
+    }
+
+    public void deletePatience(){
+        listView.removeHeaderView(patienceView);
     }
 
     @Override
@@ -168,10 +162,10 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ProgressBar pb = (ProgressBar) getActivity().findViewById(R.id.pb_loading_rest);
-                    ProgressBar pbMap = (ProgressBar) getActivity().findViewById(R.id.pb_loading_rest2);
-                    pb.setVisibility(ProgressBar.GONE);
-                    pbMap.setVisibility(ProgressBar.GONE);
+//                    ProgressBar pb = (ProgressBar) getActivity().findViewById(R.id.pb_loading_rest);
+//                    ProgressBar pbMap = (ProgressBar) getActivity().findViewById(R.id.pb_loading_rest2);
+//                    pb.setVisibility(ProgressBar.GONE);
+//                    pbMap.setVisibility(ProgressBar.GONE);
                 }
             });
         } else {
@@ -190,6 +184,7 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     @Override
     public void onRefresh() {
         TabsActivity.customsearch = false;
+        deleteFooter();
         TabsActivity act = (TabsActivity) this.getActivity();
         swipeLayout.setRefreshing(true);
 
