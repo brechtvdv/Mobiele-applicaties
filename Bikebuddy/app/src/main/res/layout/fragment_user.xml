@@ -33,34 +33,66 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="40dp"
-            android:layout_gravity="left">
+            android:layout_marginLeft="40dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/user_fragment_rank"
+                    android:textSize="20dp"
+                    android:layout_gravity="left"
+                    android:id="@+id/UserFragmentRank"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="220dp"
+                    android:layout_marginRight="0dp"
+                    android:text="-1"
+                    android:textSize="20dp"
+                    android:layout_gravity="right"
+                    android:id="@+id/UserFragmentRankNr"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/user_fragment_points"
+                    android:textSize="20dp"
+                    android:id="@+id/UserFragmentPoints"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="208dp"
+                    android:layout_marginRight="0dp"
+                    android:text="-1"
+                    android:textSize="20dp"
+                    android:layout_gravity="right"
+                    android:id="@+id/UserFragmentPointsNr"
+                    />
+            </LinearLayout>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
-                android:text="@string/user_fragment_rank"
-                android:textSize="20dp"
-                android:id="@+id/textRank"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:text="@string/user_fragment_points"
-                android:textSize="20dp"
-                android:id="@+id/textPoints"
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:layout_marginLeft="10dp"
-                android:text="free points"
+                android:text="1 free day is 10 points"
                 android:textSize="20dp"
                 android:id="@+id/textFreePoints"
                 />
@@ -72,14 +104,14 @@
                 android:layout_marginLeft="10dp"
                 android:text="free days"
                 android:textSize="20dp"
-                android:id="@+id/textFreeDays"
+                android:id="@+id/UserFragmentFreeDays"
                 />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Button"
-                android:id="@+id/button"
+                android:text="Exchange"
+                android:id="@+id/UserFragmentExchangeButton"
                 />
 
         </LinearLayout>
