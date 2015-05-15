@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
@@ -20,6 +21,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
+import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.beans.User;
@@ -50,6 +52,7 @@ public class TabsActivity extends FragmentActivity {
     public static List<BikeStation> visibleBikeStations; // holds all visible stations for adapter so user doesn't get to see all stations in one list directly
     public static List<BikeStation> mapStations;
     public static List<User> users;
+    public static User[] user = new User[1];
 
     public static boolean loadingMore = false;
     private List<BikeStation> myListItems; // temp variable for updating listview
@@ -231,6 +234,49 @@ public class TabsActivity extends FragmentActivity {
                     }
                 //}
             //}
+        }
+    };
+
+    //Runnable to load the items
+    public Runnable loadUserInfo = new Runnable() {
+        @Override
+        public void run() {
+            // online
+            Log.i("user", "start loading info");
+            if (Tools.isInternetAvailable(getApplicationContext())) {
+                Log.i("user", "Internet is available");
+                if (Tools.isInternetAvailable(getApplicationContext())) {
+                    Log.i("user", "no really:p");
+                    Thread t = new Thread(new Runnable() {
+                        public void run() {
+                            Log.i("user", "into thread");
+                            if(DataSingleton.getData().getEmail() != null) {
+                                Log.i("user", "we got an email");
+                                RestClient restClient = new RestClient(getResources().getString(R.string.rest_profile) + "/" + DataSingleton.getData().getEmail());
+                                try {
+                                    Log.i("user", "try REST call");
+                                    restClient.Execute(RestClient.RequestMethod.GET);
+                                } catch (Exception e) {
+                                    Log.i("user", "REST call went wrong");
+                                    e.printStackTrace();
+                                }
+                                String response = restClient.getResponse();
+                                Log.i("user", "response is " + response);
+                                Gson gson = new Gson();
+                                user[0] = gson.fromJson(response, new TypeToken<User>() {
+                                }.getType());
+                                Log.i("user", "created user is " + user[0]);
+                            }
+                        }
+                    });
+                    t.start();
+                    try {
+                        t.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     };
 

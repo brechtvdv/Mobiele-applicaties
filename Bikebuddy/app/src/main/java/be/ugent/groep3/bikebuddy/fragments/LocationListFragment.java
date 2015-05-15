@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -194,6 +195,9 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
         t.start();
         Thread tt = new Thread(null,act.loadUsers);
         tt.start();
+        Log.i("user", "load User info");
+        Thread ttt = new Thread(null, act.loadUserInfo);
+        ttt.start();
         adapter.sortByBonuspoints();
         updateGUIList();
 
