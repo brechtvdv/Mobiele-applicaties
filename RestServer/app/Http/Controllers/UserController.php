@@ -26,7 +26,7 @@ class UserController extends Controller {
         $code = Input::get('code');
         $email = Input::get('email');
 
-        if( $code != (integer)$code )
+        //if( $code != (integer)$code )
             //echo 'not a integer';
 
         // afleidingsmechanisme nodig die code valideert, fietslocatie bepaalt en zo het aantal bonuspunten toekent
