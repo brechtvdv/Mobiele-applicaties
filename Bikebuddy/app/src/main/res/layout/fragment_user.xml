@@ -121,7 +121,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
-            android:text="free days"
+            android:text=""
             android:textSize="20dp"
             android:id="@+id/textContact" />
 
@@ -130,7 +130,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
-            android:text="free days"
+            android:text=""
             android:textSize="20dp"
             android:id="@+id/textAdress" />
 
@@ -139,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_marginLeft="10dp"
-            android:text="free days"
+            android:text=""
             android:textSize="20dp"
             android:id="@+id/textTelephone" />
     </LinearLayout>

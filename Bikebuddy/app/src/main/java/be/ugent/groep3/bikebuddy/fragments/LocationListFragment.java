@@ -195,7 +195,6 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
         t.start();
         Thread tt = new Thread(null,act.loadUsers);
         tt.start();
-        Log.i("user", "load User info");
         Thread ttt = new Thread(null, act.loadUserInfo);
         ttt.start();
         adapter.sortByBonuspoints();
