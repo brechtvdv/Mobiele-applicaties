@@ -2,6 +2,8 @@ package be.ugent.groep3.bikebuddy;
 
 import android.util.Log;
 
+import be.ugent.groep3.bikebuddy.beans.User;
+
 /**
  * Created by Sam on 10/05/2015.
  */
@@ -10,6 +12,7 @@ public class DataSingleton {
     private String name;
     private String email;
     private String cookie;
+    private User user;
 
     static{
         data = new DataSingleton();
@@ -17,6 +20,14 @@ public class DataSingleton {
 
     private DataSingleton(){
 
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getCookie(){

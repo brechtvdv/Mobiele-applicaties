@@ -52,7 +52,7 @@ public class TabsActivity extends FragmentActivity {
     public static List<BikeStation> visibleBikeStations; // holds all visible stations for adapter so user doesn't get to see all stations in one list directly
     public static List<BikeStation> mapStations;
     public static List<User> users;
-    public static User[] user = new User[1];
+    public static User user;
 
     public static boolean loadingMore = false;
     private List<BikeStation> myListItems; // temp variable for updating listview
@@ -263,18 +263,14 @@ public class TabsActivity extends FragmentActivity {
                                 String response = restClient.getResponse();
                                 Log.i("user", "response is " + response);
                                 Gson gson = new Gson();
-                                user[0] = gson.fromJson(response, new TypeToken<User>() {
-                                }.getType());
-                                Log.i("user", "created user is " + user[0]);
+                                DataSingleton.getData().setUser((User) gson.fromJson(response, new TypeToken<User>() {
+                                }.getType()));
+                                Log.i("user", "created user is " + DataSingleton.getData().getUser());
+
                             }
                         }
                     });
                     t.start();
-                    try {
-                        t.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }

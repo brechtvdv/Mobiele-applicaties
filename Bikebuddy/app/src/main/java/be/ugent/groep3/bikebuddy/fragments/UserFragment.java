@@ -35,8 +35,9 @@ public class UserFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user, container, false);
 
         mName = (TextView) view.findViewById(R.id.userFragmentName);
-        if(TabsActivity.user[0] != null){
-            Log.i("test", "created user " + TabsActivity.user[0]);
+        if(DataSingleton.getData().getUser() != null){
+            Log.i("test", "created user " + DataSingleton.getData().getUser());
+            mName.setText((CharSequence) DataSingleton.getData().getUser().getName());
         }else{
             Log.i("test", "created no user ");
         }
