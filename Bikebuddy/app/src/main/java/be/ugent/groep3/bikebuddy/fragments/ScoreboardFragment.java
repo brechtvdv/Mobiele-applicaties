@@ -140,8 +140,9 @@ public class ScoreboardFragment extends Fragment {
             user_name.setText(user.getName());
             TextView bonuspoints = (TextView) convertView.findViewById(R.id.user_bonuspoints);
             bonuspoints.setText(Integer.toString(user.getBonuspoints()));
-            convertView.setTag(convertView.getId(),user);
-
+            convertView.setTag(convertView.getId(), user);
+            if(user.getName().equals(DataSingleton.getData().getUser().getName()))
+                convertView.setBackgroundColor(0xfffdff16);
             return convertView;
         }
     }
