@@ -44,6 +44,7 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     private SwipeRefreshLayout swipeLayout;
     private View footerView;
     private View patienceView;
+    //private Activity myActivity;
 
     public int LOAD = 5; // amount of stations to show
     public int PAGE;
@@ -54,9 +55,9 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("Landscape mode","activity is " + getActivity());
         View view = inflater.inflate(R.layout.fragment_location_list, container, false);
         listView = (ListView) view.findViewById(R.id.list);
-
         if(Tools.isInternetAvailable(getActivity().getApplicationContext())) {
             FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
             fab.setOnClickListener(new View.OnClickListener() {
@@ -94,8 +95,21 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
         return view;
     }
 
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+        Log.i("Landscape mode", "Atached" + getActivity());
+    }
+
+    @Override
+    public void onDetach(){
+        super.onDetach();
+        Log.i("Landscape mode", "Detached");
+    }
+
+
     public void addFooter(){
-        if(listView.getFooterViewsCount()==0) {
+        if(listView != null &&  listView.getFooterViewsCount()==0) {
             footerView = ((LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_bikelocations, null, false);
             footerView.setBackgroundColor(getResources().getColor(R.color.sa));
             listView.addFooterView(footerView);
@@ -109,16 +123,23 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
     }
 
     public void deleteFooter(){
-        listView.removeFooterView(footerView);
+        if(listView != null)
+            listView.removeFooterView(footerView);
     }
 
-    public void addPatience(){
-        patienceView = ((LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_have_patience, null, false);
-        listView.addHeaderView(patienceView);
+    public void addPatience() {
+        if (this.getActivity() != null) {
+            patienceView = ((LayoutInflater) this.getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_have_patience, null, false);
+            listView.addHeaderView(patienceView);
+        }/*else{
+            patienceView = ((LayoutInflater) this.myActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.loading_have_patience, null, false);
+            listView.addHeaderView(patienceView);
+        }*/
     }
 
     public void deletePatience(){
-        listView.removeHeaderView(patienceView);
+        if(listView != null)
+            listView.removeHeaderView(patienceView);
     }
 
     @Override
@@ -184,11 +205,12 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onRefresh() {
+        Log.i("Landscape mode","onRefresh: activity is " + getActivity());
         TabsActivity.customsearch = false;
         deleteFooter();
         TabsActivity act = (TabsActivity) this.getActivity();
         swipeLayout.setRefreshing(true);
-
+        Log.i("Landscape mode", "onRefresh2: activity is " + getActivity());
         TabsActivity.visibleBikeStations.clear();
         TabsActivity.stationsLoaded = false;
         Thread t = new Thread(null,act.loadStations);
@@ -197,6 +219,7 @@ public class LocationListFragment extends Fragment implements View.OnClickListen
         tt.start();
         Thread ttt = new Thread(null, act.loadUserInfo);
         ttt.start();
+        Log.i("Landscape mode", "onRefresh: activity3 is " + getActivity());
         adapter.sortByBonuspoints();
         updateGUIList();
 

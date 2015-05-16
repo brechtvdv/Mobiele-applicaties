@@ -99,7 +99,7 @@ public class TabsActivity extends FragmentActivity {
             }
             int aantal = loclistfrag.adapter.getCount();
 
-            if(loclistfrag.listView.getFooterViewsCount()==0){
+            if(loclistfrag.listView != null &&  loclistfrag.listView.getFooterViewsCount()==0){
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -152,11 +152,13 @@ public class TabsActivity extends FragmentActivity {
         @Override
         public void run() {
             //synchronized(this) {
+            Log.i("Landscape mode","loadStations: activity is outthread " + this);
                 if(!customsearch){
                     if(!stationsLoaded){
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                Log.i("Landscape mode","loadStations: activity is inthread " + this);
                                 loclistfrag.addPatience();
                                //ProgressBar pb = (ProgressBar) findViewById(R.id.pb_loading_rest3);
                                 //ProgressBar pbMap = (ProgressBar) findViewById(R.id.pb_loading_rest2);
@@ -279,12 +281,13 @@ public class TabsActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i("Landscape mode", "start onCreate");
         setContentView(R.layout.activity_tabs);
 
         bikestations = new ArrayList<BikeStation>();
         visibleBikeStations = new ArrayList<BikeStation>();
         mapStations = new ArrayList<BikeStation>();
-
+        Log.i("Landscape mode","1");
         loclistfrag = new LocationListFragment();
         locmapfrag = new LocationMapFragment();
 
@@ -292,25 +295,28 @@ public class TabsActivity extends FragmentActivity {
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
         viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(tabsPagerAdapter);
-
+        Log.i("Landscape mode", "2");
         // Actionbar registreren:
         getActionBar().hide();
         viewPager.setOnPageChangeListener(new SimpleOnPageChangeListener(actionBar));
-
+        Log.i("Landscape mode", "3");
         // Give the PagerSlidingTabStrip the ViewPager
         PagerSlidingTabStrip tabsStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         // Attach the view pager to the tab strip
         tabsStrip.setViewPager(viewPager);
-
+        Log.i("Landscape mode", "4");
         // Laat het toetsenbord niet zien:
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
+        Log.i("Landscape mode", "5");
         // load on boot, not when returning from DetailActivity
         if(getCallingActivity() == null){
             Thread threadUsers =  new Thread(null, loadUsers);
             threadUsers.start();
-            }
+            Thread threadUserinfo = new Thread(null, loadUserInfo);
+            threadUserinfo.start();
         }
+        Log.i("Landscape mode","activitye is " + this);
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
