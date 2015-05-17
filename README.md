@@ -5,16 +5,21 @@ BikeBuddy is an Android application that promotes Villo!-stations in Brussels wi
 By using a bonus point system, users get motivated to do an extra effort to bring bicycles to higher located stations and get free 'bicycle-time' in return.
 
 # Screenshots
-![Login](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/1-Login.png "Login screen")
-![Register](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/2-Register.png "Register screen")
-![LocationList](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/3-LocationList.png "List of all/searched bikelocations")
-![Detail](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/4-Detail.png "Detail screen of a specific bikelocation")
-![Scan](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/5-Scan.png "Scan QR-code screen with Barcode Scanner")
-![Search](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/6-Search.png "Search screen for bikelocations around destination")
-![Results](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/7-Results.png "Results screen")
-![Map](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/8-Map.png "Map screen")
-![Scoreboard](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/9-Scoreboard.png "Scoreboard screen")
-![Profile](https://raw.githubusercontent.com/brechtvdv/Mobiele-applicaties/master/images/10-Profile.png "Profile screen")
+<img src="images/1-Login.png" width="200"/>
+
+<img src="images/2-Register.png" width="200"/>
+
+<img src="images/3-LocationList.png" width="200"/>
+
+<img src="images/4-Detail.png" width="200"/>
+
+<img src="images/5-Scan.png" width="200"/>
+<img src="images/6-Search.png" width="200"/>
+<img src="images/7-Results.png" width="200"/>
+<img src="images/8-Map.png" width="200"/>
+<img src="images/9-Scoreboard.png" width="200"/>
+<img src="images/10-Profile.png" width="200"/>
+<img src="images/1-Login.png" width="200"/>
 
 # Scanner
 
