@@ -130,6 +130,7 @@ public class ScoreboardFragment extends Fragment {
             if(user.getName().equals(DataSingleton.getData().getUser().getName())) {
                 convertView.setBackgroundColor(0xfffdff16);
             }else{
+                convertView.setBackgroundColor(0xffffffff);
             }
             return convertView;
         }
