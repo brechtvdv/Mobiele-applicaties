@@ -11,29 +11,14 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
-import be.ugent.groep3.bikebuddy.activities.LoginActivity;
 import be.ugent.groep3.bikebuddy.activities.TabsActivity;
-import be.ugent.groep3.bikebuddy.beans.BikeStation;
 import be.ugent.groep3.bikebuddy.beans.User;
-import be.ugent.groep3.bikebuddy.logica.RestClient;
 import be.ugent.groep3.bikebuddy.logica.Tools;
-import be.ugent.groep3.bikebuddy.sqlite.MySQLiteHelper;
 
 public class ScoreboardFragment extends Fragment {
 
@@ -141,8 +126,8 @@ public class ScoreboardFragment extends Fragment {
             TextView bonuspoints = (TextView) convertView.findViewById(R.id.user_bonuspoints);
             bonuspoints.setText(Integer.toString(user.getBonuspoints()));
             convertView.setTag(convertView.getId(), user);
-            if(user.getName().equals(DataSingleton.getData().getUser().getName()))
-                convertView.setBackgroundColor(0xfffdff16);
+//            if(user.getName().equals(DataSingleton.getData().getUser().getName()))
+//                convertView.setBackgroundColor(0xfffdff16);
             return convertView;
         }
     }
