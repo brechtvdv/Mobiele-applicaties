@@ -38,27 +38,31 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Log.i("test","onCreate user fragment");
-        View view = inflater.inflate(R.layout.fragment_user, container, false);
+        View view;
+        if(Tools.isInternetAvailable(this.getActivity().getApplicationContext())) {
+            view = inflater.inflate(R.layout.fragment_user, container, false);
+            mName = (TextView) view.findViewById(R.id.userFragmentName);
+            mRank = (TextView) view.findViewById(R.id.UserFragmentRankNr);
+            mPoints = (TextView) view.findViewById(R.id.UserFragmentPointsNr);
+            mFreeDays = (TextView) view.findViewById(R.id.UserFragmentFreeDays);
+            bExchange = (Button) view.findViewById(R.id.UserFragmentExchangeButton);
 
-        mName = (TextView) view.findViewById(R.id.userFragmentName);
-        mRank = (TextView) view.findViewById(R.id.UserFragmentRankNr);
-        mPoints = (TextView) view.findViewById(R.id.UserFragmentPointsNr);
-        mFreeDays = (TextView) view.findViewById(R.id.UserFragmentFreeDays);
-        bExchange = (Button) view.findViewById(R.id.UserFragmentExchangeButton);
-
-        if(DataSingleton.getData().getUser() != null){
-            User user = DataSingleton.getData().getUser();
-            mName.setText((CharSequence) user.getName());
-            mRank.setText(String.valueOf(user.getRanking()));
-            String freeDays = String.valueOf(user.getBonuspoints() / 10);
-            mPoints.setText(String.valueOf(user.getBonuspoints()));
-            mFreeDays.setText("You've earned " + freeDays + " free days.");
-            if(freeDays.equals("0")){
-                bExchange.setClickable(false);
-                bExchange.setEnabled(false);
+            if (DataSingleton.getData().getUser() != null) {
+                User user = DataSingleton.getData().getUser();
+                mName.setText((CharSequence) user.getName());
+                mRank.setText(String.valueOf(user.getRanking()));
+                String freeDays = String.valueOf(user.getBonuspoints() / 10);
+                mPoints.setText(String.valueOf(user.getBonuspoints()));
+                mFreeDays.setText("You've earned " + freeDays + " free days.");
+                if (freeDays.equals("0")) {
+                    bExchange.setClickable(false);
+                    bExchange.setEnabled(false);
+                }
+            } else {
+                Log.i("test", "created no user ");
             }
         }else{
-            Log.i("test", "created no user ");
+            view = inflater.inflate(R.layout.fragment_scoreboard_offline, container, false);
         }
         return view;
     }
