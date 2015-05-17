@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.activities.TabsActivity;
 import be.ugent.groep3.bikebuddy.beans.User;
@@ -126,8 +127,10 @@ public class ScoreboardFragment extends Fragment {
             TextView bonuspoints = (TextView) convertView.findViewById(R.id.user_bonuspoints);
             bonuspoints.setText(Integer.toString(user.getBonuspoints()));
             convertView.setTag(convertView.getId(), user);
-//            if(user.getName().equals(DataSingleton.getData().getUser().getName()))
-//                convertView.setBackgroundColor(0xfffdff16);
+            if(user.getName().equals(DataSingleton.getData().getUser().getName())) {
+                convertView.setBackgroundColor(0xfffdff16);
+            }else{
+            }
             return convertView;
         }
     }
