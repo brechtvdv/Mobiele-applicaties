@@ -9,12 +9,12 @@ By using a bonus point system, users get motivated to do an extra effort to brin
 <img src="images/2-Register.png" width="200"/>
 <img src="images/3-LocationList.png" width="200"/>
 <img src="images/4-Detail.png" width="200"/>
-<img src="images/5-Scan.png" width="200"/>
 <img src="images/6-Search.png" width="200"/>
 <img src="images/7-Results.png" width="200"/>
 <img src="images/8-Map.png" width="200"/>
 <img src="images/9-Scoreboard.png" width="200"/>
 <img src="images/10-Profile.png" width="200"/>
+<img src="images/5-Scan.png" width="200"/>
 
 # Scanner
 
