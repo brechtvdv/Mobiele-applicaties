@@ -37,6 +37,7 @@ import java.util.regex.Pattern;
 import be.ugent.groep3.bikebuddy.DataSingleton;
 import be.ugent.groep3.bikebuddy.R;
 import be.ugent.groep3.bikebuddy.logica.RestClient;
+import be.ugent.groep3.bikebuddy.logica.Tools;
 
 /**
  * A login screen that offers login via email/password.
@@ -66,45 +67,48 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        Log.i("test","setUpLogin");
+        Log.i("test", "setUpLogin");
 
         getActionBar().hide();
+        if(Tools.isInternetAvailable(getApplicationContext())) {
+            // Set up the login form.
+            mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+            populateAutoComplete();
 
-        // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-        populateAutoComplete();
-
-        mPasswordView = (EditText) findViewById(R.id.password);
-        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
-                    return true;
+            mPasswordView = (EditText) findViewById(R.id.password);
+            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                    if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                        attemptLogin();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-        });
+            });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin();
-            }
-        });
+            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+            mEmailSignInButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    attemptLogin();
+                }
+            });
 
-        Button mRegisterButton = (Button) findViewById(R.id.register_button);
-        mRegisterButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("test","go to attemptRegister");
-                attemptRegister();
-            }
-        });
+            Button mRegisterButton = (Button) findViewById(R.id.register_button);
+            mRegisterButton.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.i("test", "go to attemptRegister");
+                    attemptRegister();
+                }
+            });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+            mLoginFormView = findViewById(R.id.login_form);
+            mProgressView = findViewById(R.id.login_progress);
+        }else{
+            attemptLoginOffline();
+        }
     }
 
     @Override
